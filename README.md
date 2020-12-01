@@ -4,8 +4,9 @@
 <h5 align="center">Fater super-resolution fluctuation imaging: SACD reconstruction with FIJI/ImageJ.</h5>
 </p>
 </br>
+
 <p>
-<img src='/imgs/imagej-128.png' align="left" width=120>
+<img src='/imgs/splash.png' align="left" width=180>
 </p>
 
 
@@ -14,12 +15,17 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 </br>
 </br>
 
+<p>
+<img src='/img/imagej-128.png' align="right" width=50>
+</p>
+</br>
+
 [Portal]() to the plugin.
 
 ## SACD reconstruction
 
 <p align='center'>
-<img src='/imgs/SACD model.png' align="center" width=700>
+<img src='/imgs/SACD model.png' align="center" width=900>
 </p>
 
 
