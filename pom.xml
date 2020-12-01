@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<project xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+			http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		<modelVersion>4.0.0</modelVersion>
+		<parent>
+			<groupId>org.scijava</groupId>
+			<artifactId>pom-scijava</artifactId>
+			<version>14.0.0</version>
+			<relativePath />
+		</parent>
+
+
+<!-- 		<parent>
+			<groupId>org.scijava</groupId>
+			<artifactId>pom-scijava</artifactId>
+			<version>22.3.0</version>
+			<relativePath />
+		</parent> -->
+
+		<groupId>com.HIT.weisongzhao</groupId>
+		<artifactId>SACDj_</artifactId>
+		<version>0.6.3</version>
+
+		<name>Faster super-resolution fluctuation imaging</name>
+		<url>https://github.com/WeisongZhao/SACDj</url>
+		<inceptionYear>2020</inceptionYear>
+		<organization>
+			<name>Harbin Institute of Technology</name>
+			<url>http://en.hit.edu.cn/</url>
+		</organization>
+		<licenses>
+			<license>
+				<name>GNU v3.0</name>
+				<distribution>repo</distribution>
+			</license>
+		</licenses>
+
+		<developers>
+			<developer>
+				<id>weisongzhao</id>
+				<name>Weisong Zhao</name>
+				<url>https://weisongzhao.github.io/</url>
+				<roles>
+					<role>lead</role>
+					<role>developer</role>
+					<role>debugger</role>
+					<role>reviewer</role>
+					<role>support</role>
+					<role>maintainer</role>
+				</roles>
+			</developer>
+		</developers>
+		<contributors>
+			<contributor>
+				<name>Weisong Zhao</name>
+				<url>https://weisongzhao.github.io/</url>
+				<roles><role>developer</role></roles>
+				<properties><id>weisongzhao</id></properties>
+			</contributor>
+		</contributors>
+		<mailingLists>
+			<mailingList>
+				<name>Image.sc Forum</name>
+				<archive>https://forum.image.sc/</archive>
+			</mailingList>
+		</mailingLists>
+
+		<scm>
+			<connection>scm:git:git://github.com/WeisongZhao/SACDj</connection>
+			<developerConnection>scm:git:git@github.com:WeisongZhao/SACDj</developerConnection>
+			<tag>HEAD</tag>
+			<url>https://github.com/WeisongZhao/SACDj</url>
+		</scm>
+		<issueManagement>
+			<system>GitHub Issues</system>
+			<url>https://github.com/WeisongZhao/SACDj/issues</url>
+		</issueManagement>
+		<ciManagement>
+			<system>None</system>
+		</ciManagement>
+
+		<properties>
+			<license.licenseName>bsd_2</license.licenseName>
+			<package-name>com.HIT.weisongzhao</package-name>
+			<main-class>com.HIT.weisongzhao.SOFI</main-class>
+			<license.copyrightOwners>Weisong Zhao</license.copyrightOwners>
+		</properties>
+
+		<dependencies>
+			<dependency>
+				<groupId>net.imagej</groupId>
+				<artifactId>ij</artifactId>
+			</dependency>
+		</dependencies>
+		
+		<description>Faster super-resolution fluctuation imaging</description>
+	</project>
