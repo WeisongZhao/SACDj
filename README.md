@@ -6,7 +6,7 @@
 </br>
 
 <p>
-<img src='/imgs/splash.png' align="left" width=180>
+<img src='/imgs/splash.png' align="left" width=170>
 </p>
 
 
@@ -16,7 +16,7 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 </br>
 
 <p>
-<img src='/img/imagej-128.png' align="right" width=50>
+<img src='/imgs/imagej-128.png' align="right" width=50>
 </p>
 </br>
 
