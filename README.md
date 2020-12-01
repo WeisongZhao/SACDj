@@ -17,8 +17,9 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 [Portal]() to the plugin.
 
 ## SACD reconstruction
+
 <p align='center'>
-<img src='/imgs/.png' align="center" width=700>
+<img src='/imgs/SACD model.png' align="center" width=700>
 </p>
 
 
