@@ -8,38 +8,38 @@ import ij.ImagePlus;
 import ij.gui.GenericDialog;
 import ij.plugin.PlugIn;
 
-
 public class Fourier_Interpolation_plugin extends JDialog implements PlugIn {
 
-
 	private static int N = 2;
+
+	@Override
 	public void run(String arg) {
 
 		if (IJ.versionLessThan("1.46j"))
 			return;
 		ImagePlus imp = IJ.getImage();
-		if (imp.isComposite() && imp.getNChannels()==imp.getStackSize()) {
+		if (imp.isComposite() && imp.getNChannels() == imp.getStackSize()) {
 			IJ.error("Fourier interpolation", "Composite color images not supported for now");
 			return;
 		}
 		if (!showDialog())
 			return;
 		imp.startTiming();
-		SACD_Analyze.FourierInterpolation(imp, N);
-		IJ.showTime(imp, imp.getStartTime(), "", imp.getStackSize());
+		ImagePlus imglarge = SACD_Analyze.FourierInterpolation(imp, N);
+		imglarge.setTitle("Fourier interpolated");
+		imglarge.show();
+		//		IJ.showTime(imp, imp.getStartTime(), "", imp.getStackSize());
 	}
 
 	private boolean showDialog() {
 		GenericDialog gd = new GenericDialog("Fourier interpolation");
-		gd.addNumericField("Fourier interpolation", N, 0,3,"times");
+		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return false;
 		N = (int) gd.getNextNumber();
 		return true;
 	}
-
-	
 
 	public static void main(String[] args) {
 

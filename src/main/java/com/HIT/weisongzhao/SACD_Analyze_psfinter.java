@@ -48,15 +48,11 @@ import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import signalSACD.RealSignal;
 
-public class SACD_Analyze extends JDialog implements PlugIn {
-	private static int order = 2;
+public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 	private static int iterations1 = 30;
 	private static int iterations2 = 60;
 	private static int skip = 20;
-	private static float scale = 2;
 	private static int N = 1;
-	private static float subfactor = (float) 0.8;
-	private static int rollfactor = skip;
 
 	@Override
 	public void run(String arg) {
@@ -94,27 +90,14 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				break;
 			}
 		}
-		String titlePSF2 = Prefs.get("SACD.titlePSF2", titles[0]);
-		int psfChoice2 = 0;
-		for (int i = 0; i < wList.length; i++) {
-			if (titlePSF2.equals(titles[i])) {
-				psfChoice2 = i;
-				break;
-			}
-		}
 
 		GenericDialog gd = new GenericDialog("SACD: faster fluctuation image analyse");
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
 		gd.addChoice("PSF under original pixel size", titles, titles[psfChoice]);
-		gd.addChoice("PSF under interpolated pixel size", titles, titles[psfChoice2]);
 		gd.addNumericField("Frames for 1 SR image (skip)", skip, 0, 5, "20~50");
 		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");
-		gd.addNumericField("Order", order, 0, 3, "2 (Advanced, 1~4)");
-		gd.addNumericField("Scale of PSF", scale, 1, 3, "2 (Advanced, 1~4)");
-		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (Advanced, 0~1)");
-		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "skip (Advanced, 1~skip)");
 
 //		boolean ifsub = Prefs.get("SACD.sub", false);
 //
@@ -131,19 +114,12 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		iterations1 = (int) gd.getNextNumber();
 		N = (int) gd.getNextNumber();
 		iterations2 = (int) gd.getNextNumber();
-		order = (int) gd.getNextNumber();
-		scale = (float) gd.getNextNumber();
-		subfactor = (float) gd.getNextNumber();
-		rollfactor = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 		ImagePlus impA = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-		ImagePlus impA2 = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-//		ifsub = gd.getNextBoolean();
-//		Prefs.set("SACD.sub", ifsub);
-//		gd.addMessage("Note");
+
 		if (!showDialog())
 			return;
-		SACD_recon(impY, impA, impA2, skip, iterations1, N, order, scale, iterations2, subfactor, rollfactor);
+		SACD_recon(impY, impA, skip, iterations1, N, 2, 2, iterations2, (float) 0.5, skip);
 	}
 
 	private boolean showDialog() {
@@ -151,8 +127,8 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		return true;
 	}
 
-	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, int N, int order,
-			float scale, int iterations2, float subfactor, int rollfactor) {
+	public void SACD_recon(ImagePlus imp, ImagePlus psf, int skip, int iterations1, int N, int order, float scale,
+			int iterations2, float subfactor, int rollfactor) {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
@@ -180,6 +156,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
+				ImagePlus psf2 = FourierInterpolation(psf, N);
 				SACD = RLD(cum, psf2, iterations2, scale);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
