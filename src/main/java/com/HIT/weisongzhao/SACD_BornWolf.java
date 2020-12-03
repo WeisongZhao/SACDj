@@ -2,7 +2,6 @@
 * Conditions of use: You are free to use this software for research or
 
 
-
 * educational purposes. In addition, we expect you to include adequate
 * citations and acknowledgments whenever you present or publish results that
 * are based on it.
@@ -52,8 +51,11 @@ import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import signalSACD.RealSignal;
 
-public class SACD_Analyze extends JDialog implements PlugIn {
+public class SACD_BornWolf extends JDialog implements PlugIn {
 	private static int order = 2;
+	private static double NA = 1.4;
+	private static double lambda = 561;
+	private static double lateralres = 65;
 	private static int iterations1 = 30;
 	private static int iterations2 = 60;
 	private static int skip = 20;
@@ -90,52 +92,35 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			}
 		}
 
-		String titlePSF = Prefs.get("SACD.titlePSF", titles[0]);
-		int psfChoice = 0;
-		for (int i = 0; i < wList.length; i++) {
-			if (titlePSF.equals(titles[i])) {
-				psfChoice = i;
-				break;
-			}
-		}
-		String titlePSF2 = Prefs.get("SACD.titlePSF2", titles[0]);
-		int psfChoice2 = 0;
-		for (int i = 0; i < wList.length; i++) {
-			if (titlePSF2.equals(titles[i])) {
-				psfChoice2 = i;
-				break;
-			}
-		}
-
 		GenericDialog gd = new GenericDialog("SACD: Faster fluctuation image analyse");
-
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
-		gd.addChoice("PSF under original pixel size", titles, titles[psfChoice]);
-		gd.addChoice("PSF under interpolated pixel size (/N)", titles, titles[psfChoice2]);
+
+		gd.addMessage("For PSF:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
+		gd.addNumericField("NA", NA, 1);
+		gd.addNumericField("Wave length", lambda, 0);
+		gd.addNumericField("Pixel size", lateralres, 2);
 
 		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 		gd.addNumericField("Frames for 1 SR image (stack)", skip, 0, 5, "20~50 frames");
-		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
-		gd.addNumericField("Fourier interpolation (N)", N, 0, 3, "times");
-		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");
+		gd.addNumericField(" 1st iterations (30)", iterations1, 0, 5, "times");
+		gd.addNumericField(" Fourier interpolation", N, 0, 3, "times");
+		gd.addNumericField(" 2nd iterations (60)", iterations2, 0, 5, "times");
+
 		gd.addMessage("__________________________________________________________");
 		gd.addMessage("Advanced settings:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
+
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
 		gd.addNumericField("Scale of PSF", scale, 1, 3, "2 (1~4)");
 		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (0~1)");
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack) frames");
 
-//		boolean ifsub = Prefs.get("SACD.sub", false);
-//
-//		String[] cbgl2 = new String[] { "Subtract mean value", };
-//		boolean[] cbgd2 = new boolean[] { ifsub };
-//		gd.addCheckboxGroup(1, 2, cbgl2, cbgd2);
-
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return;
 		// Get parameters
-
+		NA = gd.getNextNumber();
+		lambda = gd.getNextNumber();
+		lateralres = gd.getNextNumber();
 		skip = (int) gd.getNextNumber();
 		iterations1 = (int) gd.getNextNumber();
 		N = (int) gd.getNextNumber();
@@ -145,14 +130,13 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		subfactor = (float) gd.getNextNumber();
 		rollfactor = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-		ImagePlus impA = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-		ImagePlus impA2 = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 //		ifsub = gd.getNextBoolean();
 //		Prefs.set("SACD.sub", ifsub);
 //		gd.addMessage("Note");
 		if (!showDialog())
 			return;
-		SACD_recon(impY, impA, impA2, skip, iterations1, N, order, scale, iterations2, subfactor, rollfactor);
+		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, N, order, scale, iterations2, subfactor,
+				rollfactor);
 	}
 
 	private boolean showDialog() {
@@ -160,8 +144,9 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		return true;
 	}
 
-	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, int N, int order,
-			float scale, int iterations2, float subfactor, int rollfactor) {
+	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1, int N,
+			int order, float scale, int iterations2, float subfactor, int rollfactor) {
+		ImagePlus psf = CreatPSF(NA, lambda, resLateral);
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
@@ -189,6 +174,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
+				ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
 				SACD = RLD(cum, psf2, iterations2, scale);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
@@ -302,6 +288,51 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			scale = input;
 		}
 		return scale;
+	}
+
+	public static ImagePlus CreatPSF(double NA, double lambda, double resLateral) {
+		int nx = 33, ny = 33;
+		// The center of the image in units of [pixels]
+		double x0 = (nx - 1) / 2.0;
+		double y0 = (ny - 1) / 2.0;
+		int OVER_SAMPLING = 1;
+		// Lateral particle position in units of [pixels]
+		double xp = x0;
+		double yp = y0;
+		lambda = lambda * 1E-9;
+//		resLateral = resLateral * 1E-9;
+		// Radial locations.
+		int maxRadius = ((int) Math.round(Math.sqrt((nx - x0) * (nx - x0) + (ny - y0) * (ny - y0)))) + 1;
+		double[] r = new double[maxRadius * OVER_SAMPLING];
+		double[] h = new double[r.length];
+
+		KirchhoffDiffractionSimpson I = new KirchhoffDiffractionSimpson(0, 1.5, 1, NA, lambda);
+
+		for (int n = 0; n < r.length; n++) {
+			r[n] = (n) / ((double) OVER_SAMPLING);
+			h[n] = I.calculate(r[n] * resLateral * 1E-9);
+		}
+
+		// Linear interpolation of the pixels values
+		double[] slice = new double[nx * ny];
+		for (int x = 0; x < nx; x++) {
+			for (int y = 0; y < ny; y++) {
+				// radius of the current pixel in units of [pixels]
+				double rPixel = Math.sqrt((x - xp) * (x - xp) + (y - yp) * (y - yp));
+				// Index of nearest coordinate from bellow
+				int index = (int) Math.floor(rPixel * OVER_SAMPLING);
+				// Interpolated value.
+				slice[x + nx * y] = h[index] + (h[index + 1] - h[index]) * (rPixel - r[index]) * OVER_SAMPLING;
+			}
+		}
+		float[] psfFloat = new float[slice.length];
+		for (int n = 0; n < slice.length; n++)
+			psfFloat[n] = (float) slice[n];
+		ImageStack result = new ImageStack(nx, ny);
+		result.addSlice("", psfFloat);
+		ImagePlus psf = new ImagePlus("psf", result);
+//		psf.show();
+		return psf;
 	}
 
 	// Real signal cut
@@ -478,17 +509,18 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 
 	public static void main(String[] args) {
 
-		Class<?> clazz = SACD_Analyze.class;
+		Class<?> clazz = SACD_BornWolf.class;
 		String url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class").toString();
 		String pluginsDir = url.substring("file:".length(),
 				url.length() - clazz.getName().length() - ".class".length());
 		System.setProperty("plugins.dir", pluginsDir);
 		new ImageJ();
 		ImagePlus image = IJ.openImage();
-		ImagePlus psf = IJ.openImage();
+//		ImagePlus psf = IJ.openImage();
 		image.show();
-		psf.show();
+//		psf.show();
 		IJ.runPlugIn(clazz.getName(), "");
+
 	}
 
 }

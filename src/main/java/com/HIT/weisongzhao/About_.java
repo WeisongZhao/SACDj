@@ -13,7 +13,7 @@ public class About_ extends JDialog implements PlugIn {
 
 	@Override
 	public void run(String arg) {
-		this.walk.fillAbout("SACD Analyze", " 11/29/2020", "Faster super-resolution fluctuation microscopy<br>v0.6.3",
+		this.walk.fillAbout("SACD Analyze", " 12/04/2020", "Faster super-resolution fluctuation microscopy<br>v1.0.3",
 				"School of Instrumentation Science and Engineering<br/>Harbin Institute of Technology",
 				"Weisong Zhao (zhaoweisong950713@163.com)", "2020",
 				"<p style=\"text-align:left\">"
@@ -21,8 +21,9 @@ public class About_ extends JDialog implements PlugIn {
 				+ "<br> Weisong, Zhao, et al. \"[1]. Weisong Zhao, et al. SACD. (2021)."
 				+ "<br><br><b>References:</b>"
 				+ "<br>[1] D. Sage, L. Donati, F. Soulez, D. Fortun, G. Schmit, A. Seitz, R. Guiet, C. Vonesch, and M. Unser, \"DeconvolutionLab2: An open-source software for deconvolution microscopy,\" Methods vol. 115, no. 28, 2017."
-				+ "<br>[2] https://github.com/wendykierp/JTransforms"
-				+ "<br><br><b>Acknowledgements:</b><br>This plugin is built on the top of 'DeconvolutionLab2 [1]' 'JTransforms [2]'"
+				+ "<br>[2] http://bigwww.epfl.ch/algorithms/psfgenerator/"
+				+ "<br>[3] https://github.com/wendykierp/JTransforms"				
+				+ "<br><br><b>Acknowledgements:</b><br>This plugin is built on the top of DeconvolutionLab2 [1], PSF_Generator [2], and JTransforms [3] "
 				+ "<br><br><b>Open source:</b><br>https://github.com/WeisongZhao/SACDj"
 				+ "");
 		

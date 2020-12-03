@@ -30,12 +30,13 @@
 package com.HIT.weisongzhao;
 
 import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
+
+import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JDialog;
 
 import deconvolutionSACD.algorithm.RichardsonLucy;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -53,6 +54,9 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 	private static int iterations2 = 60;
 	private static int skip = 20;
 	private static int N = 1;
+	private static double NA = 1.4;
+	private static double lambda = 561;
+	private static double lateralres = 65;
 
 	@Override
 	public void run(String arg) {
@@ -82,19 +86,18 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 			}
 		}
 
-		String titlePSF = Prefs.get("SACD.titlePSF", titles[0]);
-		int psfChoice = 0;
-		for (int i = 0; i < wList.length; i++) {
-			if (titlePSF.equals(titles[i])) {
-				psfChoice = i;
-				break;
-			}
-		}
+		GenericDialog gd = new GenericDialog("SACD: simplified version");
 
-		GenericDialog gd = new GenericDialog("SACD: faster fluctuation image analyse");
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
-		gd.addChoice("PSF under original pixel size", titles, titles[psfChoice]);
-		gd.addNumericField("Frames for 1 SR image (skip)", skip, 0, 5, "20~50");
+
+		gd.addMessage("For PSF:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
+		gd.addNumericField("NA", NA, 1);
+		gd.addNumericField("Wave length (nm)", lambda, 0);
+		gd.addNumericField("Pixel size (nm)", lateralres, 2);
+
+		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
+
+		gd.addNumericField("Frames for 1 SR image", skip, 0, 5, "20~50 frames");
 		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");
@@ -115,11 +118,10 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		N = (int) gd.getNextNumber();
 		iterations2 = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-		ImagePlus impA = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 
 		if (!showDialog())
 			return;
-		SACD_recon(impY, impA, skip, iterations1, N, 2, 2, iterations2, (float) 0.5, skip);
+		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, N, 2, 2, iterations2, (float) 0.5, skip);
 	}
 
 	private boolean showDialog() {
@@ -127,8 +129,10 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		return true;
 	}
 
-	public void SACD_recon(ImagePlus imp, ImagePlus psf, int skip, int iterations1, int N, int order, float scale,
-			int iterations2, float subfactor, int rollfactor) {
+	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1, int N,
+			int order, float scale, int iterations2, float subfactor, int rollfactor) {
+
+		ImagePlus psf = SACD_BornWolf.CreatPSF(NA, lambda, resLateral);
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
@@ -153,10 +157,10 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 
 			if (N != 1) {
 				IJ.showStatus("Fourier Interpolation");
-				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
+				ImagePlus implarge = SACD_BornWolf.FourierInterpolation(imstep1plus, N);
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
-				ImagePlus psf2 = FourierInterpolation(psf, N);
+				ImagePlus psf2 = SACD_BornWolf.CreatPSF(NA, lambda, resLateral / N);
 				SACD = RLD(cum, psf2, iterations2, scale);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
@@ -191,153 +195,6 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		ImagePlus resultplus = build(result);
 //		resultplus.show();
 		return resultplus;
-	}
-
-	// Fourier Interpolation
-	public static ImagePlus FourierInterpolation(ImagePlus imp, int N) {
-		int w = imp.getWidth(), h = imp.getHeight(), d = imp.getImageStackSize();
-		ImageStack stackA = imp.getStack();
-		float[][] dataAin = new float[d][w * h];
-		for (int i = 0; i < d; i++) {
-			dataAin[i] = (float[]) stackA.getProcessor(i + 1).convertToFloat().getPixels();
-		}
-		ImageStack result = new ImageStack(N * w, N * h);
-		for (int z = 0; z < d; z++) {
-			float[] a = new float[2 * w * h];
-			for (int k2 = 0; k2 < h; k2++) {
-				for (int k1 = 0; k1 < w; k1++) {
-					a[k2 * 2 * w + 2 * k1] = dataAin[z][k2 * w + k1];
-					a[k2 * 2 * w + 2 * k1 + 1] = dataAin[z][k2 * w + k1];
-				}
-			}
-			int s = w;
-			if (w < h)
-				s = h;
-			if (w > h)
-				s = w;
-			if (w == h)
-				s = w;
-			float[] b = new float[N * N * s * s];
-			float[] bl;
-			float[] largea = padScale(a, w, h);
-
-			FloatFFT_2D FFT_J = new FloatFFT_2D(s, s);
-
-			FFT_J.complexForward(largea);
-
-			bl = pad2D(largea, s, s, N);
-
-			FloatFFT_2D FFT_Jinverse = new FloatFFT_2D(N * s, N * s);
-
-			FFT_Jinverse.complexInverse(bl, false);
-
-			for (int i = 0; i < bl.length / 2; i++) {
-				b[i] = (float) sqrt(abs(bl[i * 2] * bl[i * 2] + bl[i * 2 + 1] * bl[i * 2 + 1]));
-			}
-
-			result.addSlice("", cutScale(b, w, h, N));
-		}
-		ImagePlus image = new ImagePlus("Fourier interpolated", result);
-//		image.show();
-		return image;
-	}
-
-	// Complex signal pad
-	public static float[] padScale(float[] input, int w, int h) {
-		int s = w;
-		if (w < h)
-			s = h;
-		if (w > h)
-			s = w;
-		if (w == h)
-			s = w;
-		float[] scale = new float[2 * s * s];
-		if (w < h) {
-			for (int i = 0; i < h; i++) {
-				for (int j = 0; j < w; j++) {
-					scale[i * 2 * h + j * 2] = input[i * 2 * w + j * 2];
-					scale[i * 2 * h + j * 2 + 1] = input[i * 2 * w + j * 2 + 1];
-				}
-			}
-		} else if (w > h) {
-			for (int i = 0; i < h; i++) {
-				for (int j = 0; j < w; j++) {
-					scale[i * 2 * w + j * 2] = input[i * 2 * w + j * 2];
-					scale[i * 2 * w + j * 2 + 1] = input[i * 2 * w + j * 2 + 1];
-				}
-			}
-		} else {
-			scale = input;
-		}
-		return scale;
-	}
-
-	// Real signal cut
-	public static float[] cutScale(float[] input, int w, int h, int N) {
-		//
-		int s = N * w;
-		if (w < h)
-			s = N * h;
-		if (w > h)
-			s = N * w;
-		if (w == h)
-			s = N * w;
-		float[] small = new float[N * N * w * h];
-		if (w == h) {
-			small = input;
-		} else {
-			for (int i = 0; i < N * h; i++) {
-				for (int j = 0; j < N * w; j++) {
-					small[i * N * w + j] = input[i * s + j];
-				}
-			}
-		}
-		return small;
-	}
-
-	public static float[] pad2D(float[] input, int w, int h, int N) {
-
-		int lx = N * w;
-		int ly = N * h;
-
-		int ow = w / 2;
-		int oh = h / 2;
-
-		if (lx == w)
-			if (ly == h)
-				return input;
-
-		float[] large = new float[2 * N * N * w * h];
-		// first
-		for (int i = 0; i < oh; i++) {
-			for (int j = 0; j < ow; j++) {
-				large[j * 2 + i * lx * 2] = input[j * 2 + i * w * 2];
-				large[j * 2 + i * lx * 2 + 1] = input[j * 2 + i * w * 2 + 1];
-			}
-		}
-		// second
-		for (int i = 0; i < oh; i++) {
-			for (int j = ow; j < w; j++) {
-				large[j * 2 + i * lx * 2 + (N - 1) * w * 2] = input[j * 2 + i * w * 2];
-				large[j * 2 + i * lx * 2 + (N - 1) * w * 2 + 1] = input[j * 2 + i * w * 2 + 1];
-			}
-		}
-		// third
-		for (int i = oh; i < h; i++) {
-			for (int j = 0; j < ow; j++) {
-				large[j * 2 + i * lx * 2 + N * w * 2 * (N - 1) * h] = input[j * 2 + i * w * 2];
-				large[j * 2 + i * lx * 2 + N * w * 2 * (N - 1) * h + 1] = input[j * 2 + i * w * 2 + 1];
-			}
-		}
-
-		for (int i = oh; i < h; i++) {
-			for (int j = ow; j < w; j++) {
-				large[j * 2 + i * lx * 2 + (N) * w * 2 * (N - 1) * h + (N - 1) * w * 2] = input[j * 2 + i * w * 2];
-				large[j * 2 + i * lx * 2 + (N) * w * 2 * (N - 1) * h + (N - 1) * w * 2 + 1] = input[j * 2 + i * w * 2
-						+ 1];
-			}
-		}
-		return large;
 	}
 
 	// -------------------------------------------------Cumulant-----------------------------------------------------
@@ -446,16 +303,16 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 
 	public static void main(String[] args) {
 
-		Class<?> clazz = SACD_Analyze.class;
+		Class<?> clazz = SACD_Analyze_psfinter.class;
 		String url = clazz.getResource("/" + clazz.getName().replace('.', '/') + ".class").toString();
 		String pluginsDir = url.substring("file:".length(),
 				url.length() - clazz.getName().length() - ".class".length());
 		System.setProperty("plugins.dir", pluginsDir);
 		new ImageJ();
 		ImagePlus image = IJ.openImage();
-		ImagePlus psf = IJ.openImage();
+//		ImagePlus psf = IJ.openImage();
 		image.show();
-		psf.show();
+//		psf.show();
 		IJ.runPlugIn(clazz.getName(), "");
 	}
 

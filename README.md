@@ -1,6 +1,6 @@
 <p>
 <h1 align="center">SACD<font color="#b07219">j</font></h1>
-<h6 align="right">v0.6.3</h6>
+<h6 align="right">v1.0.3</h6>
 <h5 align="center">Fater super-resolution fluctuation imaging: SACD reconstruction with FIJI/ImageJ.</h5>
 </p>
 </br>
