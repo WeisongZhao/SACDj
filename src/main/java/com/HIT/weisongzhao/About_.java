@@ -13,7 +13,7 @@ public class About_ extends JDialog implements PlugIn {
 
 	@Override
 	public void run(String arg) {
-		this.walk.fillAbout("SACD Analyze", " 12/04/2020", "Faster super-resolution fluctuation microscopy<br>v1.0.3",
+		this.walk.fillAbout("SACD Reconstruction", " 12/04/2020", "Faster super-resolution fluctuation imaging<br>v1.0.3",
 				"School of Instrumentation Science and Engineering<br/>Harbin Institute of Technology",
 				"Weisong Zhao (zhaoweisong950713@163.com)", "2020",
 				"<p style=\"text-align:left\">"

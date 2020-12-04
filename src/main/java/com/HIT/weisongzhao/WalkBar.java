@@ -1,12 +1,23 @@
 package com.HIT.weisongzhao;
 
-import javax.swing.*;
-
-
-import javax.swing.text.DefaultCaret;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
+import javax.swing.text.DefaultCaret;
 
 public class WalkBar
   extends JToolBar
@@ -16,7 +27,7 @@ public class WalkBar
   private JButton bnHelp = new JButton("Help");
   private JButton bnAbout = new JButton("About");
   private JButton bnClose = new JButton("Close");
-  private String[] about = { "About", "Version", "Description", "Author", "Harbin Institute of Technology", "2019", "https://weisongzhao.github.io" };
+  private String[] about = { "About", "Version", "Description", "Author", "Harbin Institute of Technology", "2020", "https://weisongzhao.github.io" };
   private String help;
   private double chrono;
   private int xSizeAbout = 400;
@@ -36,7 +47,8 @@ public class WalkBar
       this.value = value;
     }
     
-    public void run()
+    @Override
+	public void run()
     {
       this.progress.setValue(this.value);
     }
@@ -54,7 +66,8 @@ public class WalkBar
       this.inc = inc;
     }
     
-    public void run()
+    @Override
+	public void run()
     {
       this.progress.setValue((int)Math.round(this.progress.getValue() + this.inc));
     }
@@ -72,7 +85,8 @@ public class WalkBar
       this.msg = msg;
     }
     
-    public void run()
+    @Override
+	public void run()
     {
       this.progress.setString(this.msg);
     }
@@ -125,7 +139,8 @@ public class WalkBar
     this.chrono = System.currentTimeMillis();
   }
   
-  public synchronized void actionPerformed(ActionEvent e)
+  @Override
+public synchronized void actionPerformed(ActionEvent e)
   {
     if (e.getSource() == this.bnHelp) {
       showHelp();
@@ -220,7 +235,8 @@ public class WalkBar
     JButton bnClose = new JButton("Close");
     bnClose.addActionListener(new ActionListener()
     {
-      public void actionPerformed(ActionEvent e)
+      @Override
+	public void actionPerformed(ActionEvent e)
       {
         frame.dispose();
       }
@@ -258,7 +274,8 @@ public class WalkBar
     JButton bnClose = new JButton("Close");
     bnClose.addActionListener(new ActionListener()
     {
-      public void actionPerformed(ActionEvent e)
+      @Override
+	public void actionPerformed(ActionEvent e)
       {
         frame.dispose();
       }
@@ -294,7 +311,8 @@ public class WalkBar
     JButton bnClose = new JButton("Close");
     bnClose.addActionListener(new ActionListener()
     {
-      public void actionPerformed(ActionEvent e)
+      @Override
+	public void actionPerformed(ActionEvent e)
       {
         frame.dispose();
       }

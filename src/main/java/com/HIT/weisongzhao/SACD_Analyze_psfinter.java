@@ -97,7 +97,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 
 		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 
-		gd.addNumericField("Frames for 1 SR image", skip, 0, 5, "20~50 frames");
+		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
 		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");
@@ -112,7 +112,9 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		if (gd.wasCanceled())
 			return;
 		// Get parameters
-
+		NA = gd.getNextNumber();
+		lambda = gd.getNextNumber();
+		lateralres = gd.getNextNumber();
 		skip = (int) gd.getNextNumber();
 		iterations1 = (int) gd.getNextNumber();
 		N = (int) gd.getNextNumber();

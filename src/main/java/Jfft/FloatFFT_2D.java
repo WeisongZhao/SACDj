@@ -26,17 +26,17 @@
  * ***** END LICENSE BLOCK ***** */
 package Jfft;
 
-import java.util.concurrent.Future;
-
+import static org.apache.commons.math3.util.FastMath.min;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utils.CommonUtils;
+
 import pl.edu.icm.jlargearrays.ConcurrencyUtils;
 import pl.edu.icm.jlargearrays.FloatLargeArray;
 import pl.edu.icm.jlargearrays.LargeArray;
-import static org.apache.commons.math3.util.FastMath.*;
+import utils.CommonUtils;
 
 /**
  * Computes 2D Discrete Fourier Transform (DFT) of complex and real, single
@@ -136,7 +136,8 @@ public class FloatFFT_2D
                     final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                     futures[l] = ConcurrencyUtils.submit(new Runnable()
                     {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             for (int r = firstRow; r < lastRow; r++) {
                                 fftColumns.complexForward(a, r * rowStride);
@@ -157,7 +158,8 @@ public class FloatFFT_2D
                     final int lastColumn = (l == (nthreads - 1)) ? columns : firstColumn + p;
                     futures[l] = ConcurrencyUtils.submit(new Runnable()
                     {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             float[] temp = new float[2 * rows];
                             for (int c = firstColumn; c < lastColumn; c++) {
@@ -253,7 +255,8 @@ public class FloatFFT_2D
                         final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                         futures[l] = ConcurrencyUtils.submit(new Runnable()
                         {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 for (long r = firstRow; r < lastRow; r++) {
                                     fftColumns.complexForward(a, r * rowStride);
@@ -274,7 +277,8 @@ public class FloatFFT_2D
                         final long lastColumn = (l == (nthreads - 1)) ? columnsl : firstColumn + p;
                         futures[l] = ConcurrencyUtils.submit(new Runnable()
                         {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 FloatLargeArray temp = new FloatLargeArray(2 * rowsl, false);
                                 for (long c = firstColumn; c < lastColumn; c++) {
@@ -366,7 +370,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             fftColumns.complexForward(a[r]);
@@ -387,7 +392,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? columns : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         float[] temp = new float[2 * rows];
                         for (int c = firstColumn; c < lastColumn; c++) {
@@ -478,7 +484,8 @@ public class FloatFFT_2D
                     final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                     futures[l] = ConcurrencyUtils.submit(new Runnable()
                     {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             for (int r = firstRow; r < lastRow; r++) {
                                 fftColumns.complexInverse(a, r * rowspan, scale);
@@ -499,7 +506,8 @@ public class FloatFFT_2D
                     final int lastColumn = (l == (nthreads - 1)) ? columns : firstColumn + p;
                     futures[l] = ConcurrencyUtils.submit(new Runnable()
                     {
-                        public void run()
+                        @Override
+						public void run()
                         {
                             float[] temp = new float[2 * rows];
                             for (int c = firstColumn; c < lastColumn; c++) {
@@ -598,7 +606,8 @@ public class FloatFFT_2D
                         final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                         futures[l] = ConcurrencyUtils.submit(new Runnable()
                         {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 for (long r = firstRow; r < lastRow; r++) {
                                     fftColumns.complexInverse(a, r * rowspan, scale);
@@ -619,7 +628,8 @@ public class FloatFFT_2D
                         final long lastColumn = (l == (nthreads - 1)) ? columnsl : firstColumn + p;
                         futures[l] = ConcurrencyUtils.submit(new Runnable()
                         {
-                            public void run()
+                            @Override
+							public void run()
                             {
                                 FloatLargeArray temp = new FloatLargeArray(2 * rowsl, false);
                                 for (long c = firstColumn; c < lastColumn; c++) {
@@ -714,7 +724,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             fftColumns.complexInverse(a[r], scale);
@@ -735,7 +746,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? columns : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         float[] temp = new float[2 * rows];
                         for (int c = firstColumn; c < lastColumn; c++) {
@@ -1302,7 +1314,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int i = firstRow; i < lastRow; i++) {
                             fftColumns.realForward(a[i]);
@@ -1329,7 +1342,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int c = firstColumn; c < lastColumn; c++) {
                             int idx2 = 2 * c;
@@ -1375,7 +1389,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx1 = 2 * r;
@@ -1401,7 +1416,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx3 = rows - r;
@@ -1502,7 +1518,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int i = firstRow; i < lastRow; i++) {
                             fftColumns.realForward(a, i * columns);
@@ -1529,7 +1546,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int c = firstColumn; c < lastColumn; c++) {
                             int idx0 = 2 * c;
@@ -1576,7 +1594,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx1 = 2 * r;
@@ -1603,7 +1622,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx5 = r * rowStride;
@@ -1712,7 +1732,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long i = firstRow; i < lastRow; i++) {
                             fftColumns.realForward(a, i * columnsl);
@@ -1739,7 +1760,8 @@ public class FloatFFT_2D
                 final long lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long c = firstColumn; c < lastColumn; c++) {
                             long idx0 = 2 * c;
@@ -1786,7 +1808,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long r = firstRow; r < lastRow; r++) {
                             long idx1 = 2 * r;
@@ -1813,7 +1836,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long r = firstRow; r < lastRow; r++) {
                             long idx5 = r * rowStride;
@@ -1920,7 +1944,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int i = firstRow; i < lastRow; i++) {
                             fftColumns.realInverse2(a[i], 0, scale);
@@ -1947,7 +1972,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int c = firstColumn; c < lastColumn; c++) {
                             int idx2 = 2 * c;
@@ -1993,7 +2019,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx1 = 2 * r;
@@ -2019,7 +2046,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx3 = rows - r;
@@ -2120,7 +2148,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int i = firstRow; i < lastRow; i++) {
                             fftColumns.realInverse2(a, i * columns, scale);
@@ -2147,7 +2176,8 @@ public class FloatFFT_2D
                 final int lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int c = firstColumn; c < lastColumn; c++) {
                             int idx0 = 2 * c;
@@ -2194,7 +2224,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx1 = 2 * r;
@@ -2221,7 +2252,8 @@ public class FloatFFT_2D
                 final int lastRow = (l == (nthreads - 1)) ? rows : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (int r = firstRow; r < lastRow; r++) {
                             int idx5 = r * rowStride;
@@ -2329,7 +2361,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long i = firstRow; i < lastRow; i++) {
                             fftColumns.realInverse2(a, i * columnsl, scale);
@@ -2356,7 +2389,8 @@ public class FloatFFT_2D
                 final long lastColumn = (l == (nthreads - 1)) ? n2d2 - 1 : firstColumn + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long c = firstColumn; c < lastColumn; c++) {
                             long idx0 = 2 * c;
@@ -2403,7 +2437,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long r = firstRow; r < lastRow; r++) {
                             long idx1 = 2 * r;
@@ -2430,7 +2465,8 @@ public class FloatFFT_2D
                 final long lastRow = (l == (nthreads - 1)) ? rowsl : firstRow + p;
                 futures[l] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         for (long r = firstRow; r < lastRow; r++) {
                             long idx5 = r * rowStride;
@@ -3087,7 +3123,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3129,7 +3166,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3171,7 +3209,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3213,7 +3252,8 @@ public class FloatFFT_2D
             final long n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3255,7 +3295,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3297,7 +3338,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     if (icr == 0) {
                         if (isgn == -1) {
@@ -3346,7 +3388,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     int idx1, idx2, idx3, idx4, idx5;
                     float[] t = new float[ntf];
@@ -3525,7 +3568,8 @@ public class FloatFFT_2D
             final long n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     long idx1, idx2, idx3, idx4, idx5;
                     FloatLargeArray t = new FloatLargeArray(ntf);
@@ -3704,7 +3748,8 @@ public class FloatFFT_2D
             final int n0 = i;
             futures[i] = ConcurrencyUtils.submit(new Runnable()
             {
-                public void run()
+                @Override
+				public void run()
                 {
                     int idx2, idx3, idx4, idx5;
                     float[] t = new float[ntf];
@@ -3892,7 +3937,8 @@ public class FloatFFT_2D
                 }
                 futures[i] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         int idx1, idx2, idx3, idx4;
 
@@ -4009,7 +4055,8 @@ public class FloatFFT_2D
                 }
                 futures[i] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         long idx1, idx2, idx3, idx4;
 
@@ -4114,7 +4161,8 @@ public class FloatFFT_2D
                 }
                 futures[i] = ConcurrencyUtils.submit(new Runnable()
                 {
-                    public void run()
+                    @Override
+					public void run()
                     {
                         int idx1, idx2;
                         for (int r = l1offa; r < l1stopa; r++) {

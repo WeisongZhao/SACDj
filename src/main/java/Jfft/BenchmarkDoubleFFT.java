@@ -26,11 +26,11 @@
  * ***** END LICENSE BLOCK ***** */
 package Jfft;
 
-import static org.apache.commons.math3.util.FastMath.*;
+import static org.apache.commons.math3.util.FastMath.max;
 
 import java.util.Arrays;
 
-import edu.emory.mathcs.utils.ConcurrencyUtils;
+import pl.edu.icm.jlargearrays.ConcurrencyUtils;
 import pl.edu.icm.jlargearrays.DoubleLargeArray;
 import  utils.CommonUtils;
 import utils.IOUtils;

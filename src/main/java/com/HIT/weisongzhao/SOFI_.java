@@ -33,7 +33,7 @@ import static java.lang.Math.sqrt;
 
 import javax.swing.JDialog;
 
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
+import Jfft.FloatFFT_2D;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -82,10 +82,10 @@ public class SOFI_ extends JDialog implements PlugIn {
 
 		GenericDialog gd = new GenericDialog("SOFI: Fluctuation image analyse");
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
-		gd.addNumericField("Frames for 1 SR image (skip)", skip, 0, 5, "20~50");
+		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("Order", order, 0, 3, "2 (Pro, 1~4)");
-		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "skip (Pro, 1~skip)");
+		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (Pro, 1~skip)");
 
 		gd.showDialog();
 		if (gd.wasCanceled())

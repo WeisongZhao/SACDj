@@ -38,8 +38,8 @@ import java.awt.Font;
 
 import javax.swing.JDialog;
 
+import Jfft.FloatFFT_2D;
 import deconvolutionSACD.algorithm.RichardsonLucy;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -107,14 +107,14 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			}
 		}
 
-		GenericDialog gd = new GenericDialog("SACD: Faster fluctuation image analyse");
+		GenericDialog gd = new GenericDialog("SACD: Faster fluctuation image reconstruction");
 
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
 		gd.addChoice("PSF under original pixel size", titles, titles[psfChoice]);
 		gd.addChoice("PSF under interpolated pixel size (/N)", titles, titles[psfChoice2]);
 
 		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
-		gd.addNumericField("Frames for 1 SR image (stack)", skip, 0, 5, "20~50 frames");
+		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
 		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation (N)", N, 0, 3, "times");
 		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");

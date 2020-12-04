@@ -31,9 +31,9 @@
 
 package fftSACD.jtransforms;
 
+import Jfft.FloatFFT_2D;
+import Jfft.FloatFFT_3D;
 import deconvolutionSACDlab.monitor.Monitors;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_3D;
 import fftSACD.AbstractFFT;
 import fftSACD.Separability;
 import signalSACD.ComplexSignal;

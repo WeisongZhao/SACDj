@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.scijava</groupId>
 		<artifactId>pom-scijava</artifactId>
-		<version>14.0.0</version>
+		<version>22.3.0</version>
 		<relativePath />
 	</parent>
 
@@ -82,9 +82,9 @@
 	</ciManagement>
 
 	<properties>
-		<license.licenseName>bsd_2</license.licenseName>
+		<license.licenseName>GNU_3</license.licenseName>
 		<package-name>com.HIT.weisongzhao</package-name>
-		<main-class>com.HIT.weisongzhao.SOFI</main-class>
+		<main-class>com.HIT.weisongzhao.SACD_BornWolf</main-class>
 		<license.copyrightOwners>Weisong Zhao</license.copyrightOwners>
 	</properties>
 
@@ -92,6 +92,16 @@
 		<dependency>
 			<groupId>net.imagej</groupId>
 			<artifactId>ij</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>pl.edu.icm</groupId>
+			<artifactId>JLargeArrays</artifactId>
+			<version>1.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
 		</dependency>
 	</dependencies>
 
