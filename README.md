@@ -39,7 +39,8 @@ If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matl
 <summary><b>Plans</b></summary>
 
 - Improve the perfomance of Fourier interpolation;
-- Remove redundant code.
+- Remove redundant code. (in progress)
+- Accelarated RL deconvolution.
 - Another type of interpolation, 3D XC type calculation will be added.
 - Add sparse deconvolution.
 </details>
