@@ -48,7 +48,7 @@ import signalSACD.RealSignal;
 
 public class SOFI_ extends JDialog implements PlugIn {
 	private static int order = 2;
-	private static int skip = 20;
+	private static int skip = 500;
 	private static int N = 1;
 	private static int rollfactor = skip;
 
@@ -82,7 +82,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 
 		GenericDialog gd = new GenericDialog("SOFI: Fluctuation image analyse");
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
-		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50");
+		gd.addNumericField("Stack per SR frame", skip, 0, 5, "500~800 frames");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("Order", order, 0, 3, "2 (Pro, 1~4)");
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (Pro, 1~skip)");
