@@ -84,8 +84,8 @@ public class SOFI_ extends JDialog implements PlugIn {
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
 		gd.addNumericField("Stack per SR frame", skip, 0, 5, "500~800 frames");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
-		gd.addNumericField("Order", order, 0, 3, "2 (Pro, 1~4)");
-		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (Pro, 1~skip)");
+		gd.addNumericField("Order", order, 0, 3, "(1~4)");
+		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack)");
 
 		gd.showDialog();
 		if (gd.wasCanceled())
