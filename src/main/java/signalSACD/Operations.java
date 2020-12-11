@@ -63,6 +63,18 @@ public class Operations {
 				output.data[k][i] = numerator.data[k][i] / denominator.data[k][i];
 		}
 	}
+	
+	public static void multiply(RealSignal numerator, RealSignal denominator, RealSignal output) { 
+		String name = numerator.name + "*" + denominator.name;
+		if (output == null)
+			 output = new RealSignal(name, numerator.nx, numerator.ny, numerator.nz);
+		
+		int nxy = numerator.nx * numerator.ny;
+		for(int k=0; k<numerator.nz; k++)
+		for(int i=0; i< nxy; i++) {
+				output.data[k][i] = numerator.data[k][i] * denominator.data[k][i];
+		}
+	}
 
 	public static RealSignal divide(RealSignal numerator, RealSignal denominator) {
 		String name = numerator.name + "/" + denominator.name;

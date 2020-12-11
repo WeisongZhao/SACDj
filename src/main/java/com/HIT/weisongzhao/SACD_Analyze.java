@@ -54,8 +54,8 @@ import signalSACD.RealSignal;
 
 public class SACD_Analyze extends JDialog implements PlugIn {
 	private static int order = 2;
-	private static int iterations1 = 30;
-	private static int iterations2 = 60;
+	private static int iterations1 = 10;
+	private static int iterations2 = 20;
 	private static int skip = 20;
 	private static float scale = 2;
 	private static int N = 1;
@@ -116,9 +116,9 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 
 		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
-		gd.addNumericField("1st iterations (30)", iterations1, 0, 5, "times");
+		gd.addNumericField("1st iterations (10)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation (N)", N, 0, 3, "times");
-		gd.addNumericField("2nd iterations (60)", iterations2, 0, 5, "times");
+		gd.addNumericField("2nd iterations (20)", iterations2, 0, 5, "times");
 		gd.addMessage("__________________________________________________________");
 		gd.addMessage("Advanced settings:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
@@ -246,7 +246,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			if (f == 0) {
 				imsReconstruction = new ImageStack(SACD.getWidth(), SACD.getHeight());
 				imsReconstruction.addSlice(SACD.getProcessor());
-				impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+				impReconstruction = new ImagePlus("SACD result", imsReconstruction);
 				impReconstruction.show();
 				Apply_LUT.applyLUT_redhot(impReconstruction);
 			} else {
