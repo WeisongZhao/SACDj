@@ -61,6 +61,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 	private static int N = 1;
 	private static float subfactor = (float) 0.8;
 	private static int rollfactor = skip;
+	protected ImagePlus impReconstruction;
 
 	@Override
 	public void run(String arg) {
@@ -150,6 +151,10 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 //		ifsub = gd.getNextBoolean();
 //		Prefs.set("SACD.sub", ifsub);
 //		gd.addMessage("Note");
+		if (order > 4) {
+			IJ.error("Higher cumulants than 4th order are usually ugly");
+			return;
+		}
 		if (!showDialog())
 			return;
 		SACD_recon(impY, impA, impA2, skip, iterations1, N, order, scale, iterations2, subfactor, rollfactor);
@@ -160,6 +165,47 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		return true;
 	}
 
+//	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, int N, int order,
+//			float scale, int iterations2, float subfactor, int rollfactor) {
+//		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
+//		ImageStack imstack = imp.getStack();
+//		skip = Math.min(t, skip);
+//		ImageStack SACDstack = new ImageStack(w * N, h * N);
+//		int frame = t / skip;
+//		rollfactor = Math.min(rollfactor, skip);
+//		for (int f = 0; f < frame * skip; f = f + rollfactor) {
+//
+//			ImagePlus SACD;
+//			ImageStack imstep1stack = new ImageStack(w, h);
+//
+//			for (int sk = f; sk < f + skip; sk++) {
+//				IJ.showStatus("1st Deconvolution");
+//				IJ.showProgress(sk - f, skip);
+//				ImageStack inputstack = new ImageStack(w, h);
+//				inputstack.addSlice("", imstack.getProcessor(sk + 1));
+//				ImagePlus input = new ImagePlus("", inputstack);
+//				ImagePlus imstep1 = RLD(input, psf, iterations1, 1);
+//				imstep1stack.addSlice("", imstep1.getStack().getProcessor(1));
+//			}
+//			ImagePlus imstep1plus = new ImagePlus("", imstep1stack);
+//
+//			if (N != 1) {
+//				IJ.showStatus("Fourier Interpolation");
+//				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
+//				ImagePlus cum = Cumulant(implarge, order, subfactor);
+//				IJ.showStatus("2nd Deconvolution");
+//				SACD = RLD(cum, psf2, iterations2, scale);
+//			} else {
+//				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
+//				IJ.showStatus("2nd Deconvolution");
+//				SACD = RLD(cum, psf, iterations2, scale);
+//			}
+//			SACDstack.addSlice("", SACD.getProcessor());
+//		}
+//		ImagePlus SACDshow = new ImagePlus("SACD result", SACDstack);
+//		SACDshow.show();
+//		IJ.showStatus("2nd Deconvolution");
+//	}
 	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, int N, int order,
 			float scale, int iterations2, float subfactor, int rollfactor) {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
@@ -195,11 +241,22 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				IJ.showStatus("2nd Deconvolution");
 				SACD = RLD(cum, psf, iterations2, scale);
 			}
-			SACDstack.addSlice("", SACD.getProcessor());
+
+			ImageStack imsReconstruction;
+			if (f == 0) {
+				imsReconstruction = new ImageStack(SACD.getWidth(), SACD.getHeight());
+				imsReconstruction.addSlice(SACD.getProcessor());
+				impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+				impReconstruction.show();
+				Apply_LUT.applyLUT_redhot(impReconstruction);
+			} else {
+				imsReconstruction = impReconstruction.getImageStack();
+				imsReconstruction.addSlice(SACD.getProcessor());
+				impReconstruction.setStack(imsReconstruction);
+				if (impReconstruction.getSlice() >= impReconstruction.getNSlices() - 1)
+					impReconstruction.setSlice(impReconstruction.getNSlices());
+			}
 		}
-		ImagePlus SACDshow = new ImagePlus("SACD result", SACDstack);
-		SACDshow.show();
-		IJ.showStatus("2nd Deconvolution");
 	}
 
 	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale) {

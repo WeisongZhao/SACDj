@@ -1,6 +1,6 @@
 <p>
 <h1 align="center">SACD<font color="#b07219">j</font></h1>
-<h6 align="right">v1.0.3</h6>
+<h6 align="right">v1.1.3</h6>
 <h5 align="center">Fater super-resolution fluctuation imaging: SACD reconstruction with FIJI/ImageJ.</h5>
 </p>
 </br>
@@ -39,7 +39,7 @@ If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matl
 <summary><b>Plans</b></summary>
 
 - Improve the perfomance of Fourier interpolation;
-- Remove redundant code. (in progress)
+- Remove redundant code and reconsitution ugly code. (in progress)
 - Accelarated RL deconvolution.
 - Another type of interpolation, 3D XC type calculation will be added.
 - Add sparse deconvolution.

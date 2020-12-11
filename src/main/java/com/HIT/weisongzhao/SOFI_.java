@@ -51,7 +51,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 	private static int skip = 500;
 	private static int N = 1;
 	private static int rollfactor = skip;
-
+	protected ImagePlus impReconstruction;
 	@Override
 	public void run(String arg) {
 
@@ -95,7 +95,10 @@ public class SOFI_ extends JDialog implements PlugIn {
 		skip = (int) gd.getNextNumber();
 		N = (int) gd.getNextNumber();
 		order = (int) gd.getNextNumber();
-
+		if (order > 4) {
+			IJ.error("Higher cumulants than 4th order are usually ugly");
+			return;
+		} 
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 
 //		gd.addMessage("Note");
@@ -109,10 +112,39 @@ public class SOFI_ extends JDialog implements PlugIn {
 		return true;
 	}
 
+//	public void SOFI_recon(ImagePlus imp, int skip, int N, int order, int rollfactor) {
+//		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
+//		ImageStack imstack = imp.getStack();
+//		ImageStack SOFIstack = new ImageStack(w * N, h * N);
+//		skip = Math.min(t,skip);
+//		int frame = imp.getStackSize() / skip;
+//		rollfactor = Math.min(rollfactor,skip);
+//		for (int f = 0; f < frame * skip; f = f + rollfactor) {
+//
+//			ImageStack imstep1stack = new ImageStack(w, h);
+//			ImageStack inputstack = new ImageStack(w, h);
+//			ImagePlus cum;
+//			for (int sk = f; sk < f + skip; sk++) {
+//				inputstack.addSlice("", imstack.getProcessor(sk + 1));
+//			}
+//			ImagePlus imstep1plus = new ImagePlus("", inputstack);
+//
+//			if (N != 1) {
+//				IJ.showStatus("Fourier Interpolation");
+//				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
+//				cum = Cumulant(implarge, order);
+//			} else {
+//				cum = Cumulant(imstep1plus, order);
+//			}
+//			SOFIstack.addSlice("", cum.getProcessor());
+//		}
+//		ImagePlus SOFIshow = new ImagePlus("SOFI result", SOFIstack);
+//		SOFIshow.show();
+//	}
+
 	public void SOFI_recon(ImagePlus imp, int skip, int N, int order, int rollfactor) {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
-		ImageStack SOFIstack = new ImageStack(w * N, h * N);
 		skip = Math.min(t,skip);
 		int frame = imp.getStackSize() / skip;
 		rollfactor = Math.min(rollfactor,skip);
@@ -133,12 +165,27 @@ public class SOFI_ extends JDialog implements PlugIn {
 			} else {
 				cum = Cumulant(imstep1plus, order);
 			}
-			SOFIstack.addSlice("", cum.getProcessor());
+			
+			ImageStack imsReconstruction;			
+			if (f == 0) {
+	            imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
+	            imsReconstruction.addSlice(cum.getProcessor());
+	            impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+	            impReconstruction.show();
+	            Apply_LUT.applyLUT_redhot(impReconstruction);
+	        }
+	        else {
+	            imsReconstruction = impReconstruction.getImageStack();
+	            imsReconstruction.addSlice(cum.getProcessor());
+	            impReconstruction.setStack(imsReconstruction);
+	            if (impReconstruction.getSlice() >= impReconstruction.getNSlices()-1)
+	                impReconstruction.setSlice(impReconstruction.getNSlices());
+	        }
 		}
-		ImagePlus SOFIshow = new ImagePlus("SOFI result", SOFIstack);
-		SOFIshow.show();
 	}
+	
 
+	
 	// Fourier Interpolation
 	public static ImagePlus FourierInterpolation(ImagePlus imp, int N) {
 		int w = imp.getWidth(), h = imp.getHeight(), d = imp.getImageStackSize();
@@ -346,6 +393,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 				Cum[i] = (float) abs(finalfourorder / (d - order + 1));
 			else if (order > 4) {
 				IJ.error("Higher cumulants than 4th order are usually ugly");
+				return null;
 			} else if (order == 1) {
 				Cum[i] = (float) (meanorder / (d - order + 1));
 			}
