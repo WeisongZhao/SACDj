@@ -40,7 +40,8 @@ If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matl
 
 - Improve the perfomance of Fourier interpolation;
 - Remove redundant code and reconsitution ugly code. (in progress)
-- Accelarated RL deconvolution.
+- Accelarated RL deconvolution. (done)
+- Accelarated RL-TV deconvolution. (done)
 - Another type of interpolation, 3D XC type calculation will be added.
 - Add sparse deconvolution.
 </details>
