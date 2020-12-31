@@ -52,7 +52,7 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 	@Override
 	public RealSignal call() {
 		ComplexSignal H = fft.transform(h);
-		ComplexSignal U = new ComplexSignal("RLTV-U",y.nx, y.ny, y.nz);
+		ComplexSignal U = new ComplexSignal("RLTV-U", y.nx, y.ny, y.nz);
 		RealSignal x = y.duplicate();
 		RealSignal gx = y.duplicate();
 		RealSignal gy = y.duplicate();
@@ -61,19 +61,44 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		RealSignal ggy = y.duplicate();
 		RealSignal ggz = y.duplicate();
 
-		RealSignal u  = gx;	// resued memory
-		RealSignal p  = gy;	// resued memory
+		RealSignal u = gx; // resued memory
+		RealSignal p = gy; // resued memory
 		RealSignal tv = gz; // resued memory
 
-		while(!controller.ends(x)) {
+		RealSignal y_vector = y.duplicate();
+		// For vector acceleration
+		RealSignal v_vector = new RealSignal("x", y.nx, y.ny, y.nz);
+		RealSignal vv_update = v_vector.duplicate();
+		RealSignal x_update = v_vector.duplicate();
+
+		// First iteration !
+		fft.transform(x, U);
+		U.times(H);
+		fft.inverse(U, u);
+		Operations.divide(y, u, p);
+		fft.transform(p, U);
+		U.timesConjugate(H);
+		fft.inverse(U, u);
+		y_vector.times(u);
+		y_vector.times(tv);
+		Operations.subtract(y_vector, x, v_vector);
+		x = y_vector.duplicate();
+
+		while (!controller.ends(x)) {
 			gradientX(x, gx);
 			gradientY(x, gy);
 			gradientZ(x, gz);
-			normalize(gx, gy, gz);	
+			normalize(gx, gy, gz);
 			gradientX(gx, ggx);
 			gradientY(gy, ggy);
 			gradientZ(gz, ggz);
-			compute((float)lambda, ggx, ggy, ggz, tv);
+			compute((float) lambda, ggx, ggy, ggz, tv);
+			
+			float alpha = 0;
+			float alphal = 0;
+			float alphau = 0;
+			// For vector acceleration
+			x_update = y_vector.duplicate();
 			fft.transform(x, U);
 			U.times(H);
 			fft.inverse(U, u);
@@ -81,8 +106,22 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 			fft.transform(p, U);
 			U.timesConjugate(H);
 			fft.inverse(U, u);
-			x.times(u); 
-			x.times(tv);
+			y_vector.times(u);
+			y_vector.times(tv);
+			vv_update = v_vector.duplicate();
+			Operations.subtract(y_vector, x, v_vector);
+			for (int z = 0; z < y.nz; z++) {
+				for (int i = 0; i < y.nx * y.ny; i++) {
+					alphau += vv_update.data[z][i] * v_vector.data[z][i];
+					alphal += vv_update.data[z][i] * vv_update.data[z][i];
+				}
+			}
+			alpha = alphau / (alphal + (float) 1E-6);
+			if (alpha < 0)
+				alpha = (float) 1E-6;
+			if (alpha > 1)
+				alpha = 1;
+			x = Operations.subtract(y_vector, x_update).times(alpha).plus(y_vector);
 		}
 		SignalCollector.free(H);
 		SignalCollector.free(U);
@@ -92,54 +131,57 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		SignalCollector.free(tv);
 		SignalCollector.free(u);
 		SignalCollector.free(p);
+		SignalCollector.free(v_vector);
+		SignalCollector.free(y_vector);
+		SignalCollector.free(vv_update);
 		return x;
 	}
-	
+
 	private void compute(float lambda, RealSignal gx, RealSignal gy, RealSignal gz, RealSignal tv) {
 		int nxy = gx.nx * gy.ny;
-		for(int k=0; k<gx.nz; k++)
-		for(int i=0; i< nxy; i++)  {
-			double dx = gx.data[k][i];
-			double dy = gy.data[k][i];
-			double dz = gz.data[k][i];
-			tv.data[k][i] = (float)(1.0 / ( (dx+dy+dz) * lambda + 1.0));
-		}
+		for (int k = 0; k < gx.nz; k++)
+			for (int i = 0; i < nxy; i++) {
+				double dx = gx.data[k][i];
+				double dy = gy.data[k][i];
+				double dz = gz.data[k][i];
+				tv.data[k][i] = (float) (1.0 / ((dx + dy + dz) * lambda + 1.0));
+			}
 	}
 
 	public void gradientX(RealSignal signal, RealSignal output) {
 		int nx = signal.nx;
 		int ny = signal.ny;
 		int nz = signal.nz;
-		for(int k=0; k<nz; k++) 
-		for(int j=0; j<ny; j++) 
-		for(int i=0; i<nx-1; i++) {
-			int index = i + signal.nx*j;
-			output.data[k][index] = signal.data[k][index] - signal.data[k][index+1];
-		}
+		for (int k = 0; k < nz; k++)
+			for (int j = 0; j < ny; j++)
+				for (int i = 0; i < nx - 1; i++) {
+					int index = i + signal.nx * j;
+					output.data[k][index] = signal.data[k][index] - signal.data[k][index + 1];
+				}
 	}
 
 	public void gradientY(RealSignal signal, RealSignal output) {
 		int nx = signal.nx;
 		int ny = signal.ny;
 		int nz = signal.nz;
-		for(int k=0; k<nz; k++) 
-		for(int j=0; j<ny-1; j++) 
-		for(int i=0; i<nx; i++) {
-			int index = i + signal.nx*j;
-			output.data[k][index] = signal.data[k][index] - signal.data[k][index+nx];
-		}
+		for (int k = 0; k < nz; k++)
+			for (int j = 0; j < ny - 1; j++)
+				for (int i = 0; i < nx; i++) {
+					int index = i + signal.nx * j;
+					output.data[k][index] = signal.data[k][index] - signal.data[k][index + nx];
+				}
 	}
-	
+
 	public void gradientZ(RealSignal signal, RealSignal output) {
 		int nx = signal.nx;
 		int ny = signal.ny;
 		int nz = signal.nz;
-		for(int k=0; k<nz-1; k++) 
-		for(int j=0; j<ny; j++) 
-		for(int i=0; i<nx; i++) {
-			int index = i + signal.nx*j;
-			output.data[k][index] = signal.data[k][index] - signal.data[k+1][index];
-		}
+		for (int k = 0; k < nz - 1; k++)
+			for (int j = 0; j < ny; j++)
+				for (int i = 0; i < nx; i++) {
+					int index = i + signal.nx * j;
+					output.data[k][index] = signal.data[k][index] - signal.data[k + 1][index];
+				}
 	}
 
 	public void normalize(RealSignal x, RealSignal y, RealSignal z) {
@@ -147,20 +189,20 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		int ny = y.ny;
 		int nz = z.nz;
 		float e = (float) Operations.epsilon;
-		for(int k=0; k<nz; k++) 
-		for(int i=0; i<nx*ny; i++) {
-			double norm = Math.sqrt(x.data[k][i] * x.data[k][i] + y.data[k][i] * y.data[k][i] + z.data[k][i] * z.data[k][i]);
-			if (norm < e) {
-				x.data[k][i] = e;
-				y.data[k][i] = e;
-				z.data[k][i] = e;
+		for (int k = 0; k < nz; k++)
+			for (int i = 0; i < nx * ny; i++) {
+				double norm = Math
+						.sqrt(x.data[k][i] * x.data[k][i] + y.data[k][i] * y.data[k][i] + z.data[k][i] * z.data[k][i]);
+				if (norm < e) {
+					x.data[k][i] = e;
+					y.data[k][i] = e;
+					z.data[k][i] = e;
+				} else {
+					x.data[k][i] /= norm;
+					y.data[k][i] /= norm;
+					z.data[k][i] /= norm;
+				}
 			}
-			else {
-				x.data[k][i] /= norm;
-				y.data[k][i] /= norm;
-				z.data[k][i] /= norm;
-			}
-		}
 	}
 
 	@Override
@@ -175,34 +217,34 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 
 	@Override
 	public String[] getShortnames() {
-		return new String[] {"RLTV"};
+		return new String[] { "RLTV" };
 	}
 
 	@Override
 	public double getMemoryFootprintRatio() {
 		return 13.0;
 	}
-	
+
 	@Override
 	public boolean isRegularized() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isStepControllable() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isIterative() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isWaveletsBased() {
 		return false;
 	}
-	
+
 	@Override
 	public Algorithm setParameters(double... params) {
 		if (params == null)
@@ -210,25 +252,25 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		if (params.length > 0)
 			iterMax = (int) Math.round(params[0]);
 		if (params.length > 1)
-			lambda = (float)params[1];
+			lambda = (float) params[1];
 		return this;
 	}
-	
+
 	@Override
 	public double[] getDefaultParameters() {
-		return new double[] {10, 0.1};
+		return new double[] { 10, 0.1 };
 	}
-	
+
 	@Override
 	public double[] getParameters() {
-		return new double[] {iterMax, lambda};
+		return new double[] { iterMax, lambda };
 	}
-	
+
 	@Override
 	public double getRegularizationFactor() {
 		return lambda;
 	}
-	
+
 	@Override
 	public double getStepFactor() {
 		return 0.0;

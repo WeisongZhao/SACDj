@@ -39,6 +39,7 @@ import javax.swing.JDialog;
 
 import Jfft.FloatFFT_2D;
 import deconvolutionSACD.algorithm.RichardsonLucy;
+import deconvolutionSACD.algorithm.RichardsonLucyTV;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -56,6 +57,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 	private static double NA = 1.4;
 	private static double lambda = 561;
 	private static double lateralres = 65;
+	private static double tv = 0;
 	private static int iterations1 = 10;
 	private static int iterations2 = 20;
 	private static int skip = 20;
@@ -64,6 +66,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 	private static float subfactor = (float) 0.8;
 	private static int rollfactor = skip;
 	protected ImagePlus impReconstruction;
+
 	@Override
 	public void run(String arg) {
 
@@ -96,7 +99,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		gd.addChoice("Image sequence for SACD reconstruction", titles, titles[imageChoice]);
 
 		gd.addMessage("For PSF:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
-		gd.addNumericField("NA", NA, 1);
+		gd.addNumericField("NA", NA, 2);
 		gd.addNumericField("Wave length", lambda, 0);
 		gd.addNumericField("Pixel size", lateralres, 2);
 
@@ -112,6 +115,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
 		gd.addNumericField("Scale of PSF", scale, 1, 3, "2 (1~4)");
 		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (0~1)");
+		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack) frames");
 
 		gd.showDialog();
@@ -128,21 +132,21 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		order = (int) gd.getNextNumber();
 		scale = (float) gd.getNextNumber();
 		subfactor = (float) gd.getNextNumber();
+		tv = gd.getNextNumber();
 		rollfactor = (int) gd.getNextNumber();
-		
-		
+
 		if (order > 4) {
 			IJ.error("Higher cumulants than 4th order are usually ugly");
 			return;
-		} 
-		
+		}
+
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 //		ifsub = gd.getNextBoolean();
 //		Prefs.set("SACD.sub", ifsub);
 //		gd.addMessage("Note");
 		if (!showDialog())
 			return;
-		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, N, order, scale, iterations2, subfactor,
+		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, tv, N, order, scale, iterations2, subfactor,
 				rollfactor);
 	}
 
@@ -194,8 +198,8 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 //		SACDshow.show();
 //		IJ.showStatus("2nd Deconvolution");
 //	}
-	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1, int N,
-			int order, float scale, int iterations2, float subfactor, int rollfactor) {
+	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1,
+			double tv, int N, int order, float scale, int iterations2, float subfactor, int rollfactor) {
 		ImagePlus psf = CreatPSF(NA, lambda, resLateral);
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
@@ -225,11 +229,11 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
 				ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
-				SACD = RLD(cum, psf2, iterations2, scale);
+				SACD = RLDTV(cum, psf2, iterations2, scale, tv);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
-				SACD = RLD(cum, psf, iterations2, scale);
+				SACD = RLDTV(cum, psf, iterations2, scale, tv);
 			}
 
 			ImageStack imsReconstruction;
@@ -248,6 +252,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 			}
 		}
 	}
+
 	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale) {
 		RealSignal psfd;
 		if (scale != 1) {
@@ -264,6 +269,30 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 			psfd = build(psfraw);
 		}
 		RichardsonLucy rl = new RichardsonLucy(iterations);
+		RealSignal y = build(imp);
+		RealSignal result = rl.run(y, psfd);
+		ImagePlus resultplus = build(result);
+//		resultplus.show();
+		return resultplus;
+	}
+
+	private ImagePlus RLDTV(ImagePlus imp, ImagePlus psfraw, int iterations, float scale, double tv) {
+		RealSignal psfd;
+		if (scale != 1) {
+			int pw = psfraw.getWidth();
+			int ph = psfraw.getHeight();
+			float[] scaledpsf = (float[]) psfraw.getProcessor().convertToFloatProcessor().getPixels();
+			for (int pl = 0; pl < scaledpsf.length; pl++)
+				scaledpsf[pl] = (float) Math.pow(scaledpsf[pl], scale);
+			ImageStack psfi = new ImageStack(pw, ph);
+			psfi.addSlice("", scaledpsf);
+			ImagePlus psfra = new ImagePlus("psf", psfi);
+			psfd = build(psfra);
+		} else {
+			psfd = build(psfraw);
+		}
+//		System.out.print("TVVVVVVVVVVVVVVVVVVVVVVVVVVV");
+		RichardsonLucyTV rl = new RichardsonLucyTV(iterations, tv * 1E-5);
 		RealSignal y = build(imp);
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
@@ -390,7 +419,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 			psfFloat[n] = (float) slice[n];
 		ImageStack result = new ImageStack(nx, ny);
 		result.addSlice("", psfFloat);
-		ImagePlus psf = new ImagePlus("psf", result);
+		ImagePlus psf = new ImagePlus("PSF - BW", result);
 //		psf.show();
 		return psf;
 	}

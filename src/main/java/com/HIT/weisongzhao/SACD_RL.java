@@ -31,7 +31,7 @@ package com.HIT.weisongzhao;
 
 import javax.swing.JDialog;
 
-import deconvolutionSACD.algorithm.RichardsonLucy;
+import deconvolutionSACD.algorithm.RichardsonLucyTV;
 import ij.IJ;
 import ij.ImageJ;
 import ij.ImagePlus;
@@ -49,6 +49,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 	private static double NA = 1.4;
 	private static double lambda = 561;
 	private static double lateralres = 65;
+	private static double tv = 0;
 	protected ImagePlus impReconstruction;
 
 	@Override
@@ -85,7 +86,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 		gd.addNumericField("NA", NA, 1);
 		gd.addNumericField("Wave length (nm)", lambda, 0);
 		gd.addNumericField("Pixel size (nm)", lateralres, 2);
-
+		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Iterations", iterations1, 0, 5, "times");
 
 		gd.showDialog();
@@ -95,11 +96,12 @@ public class SACD_RL extends JDialog implements PlugIn {
 		NA = gd.getNextNumber();
 		lambda = gd.getNextNumber();
 		lateralres = gd.getNextNumber();
+		tv = gd.getNextNumber();
 		iterations1 = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 		if (!showDialog())
 			return;
-		SACD_recon(impY, NA, lambda, lateralres, iterations1);
+		SACD_recon(impY, NA, lambda, lateralres, iterations1, tv);
 	}
 
 	private boolean showDialog() {
@@ -107,9 +109,10 @@ public class SACD_RL extends JDialog implements PlugIn {
 		return true;
 	}
 
-	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int iterations1) {
+	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int iterations1, double tv) {
 
 		ImagePlus psf = SACD_BornWolf.CreatPSF(NA, lambda, resLateral);
+		psf.show();
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 
@@ -123,7 +126,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 			ImageStack inputstack = new ImageStack(w, h);
 			inputstack.addSlice("", imstack.getProcessor(f + 1));
 			ImagePlus input = new ImagePlus("", inputstack);
-			ImagePlus imstep1 = RLD(input, psf, iterations1, 1);
+			ImagePlus imstep1 = RLD(input, psf, iterations1, 1, tv);
 			imstep1stack.addSlice("", imstep1.getStack().getProcessor(1));
 
 			ImagePlus imstep1plus = new ImagePlus("", imstep1stack);
@@ -146,8 +149,9 @@ public class SACD_RL extends JDialog implements PlugIn {
 
 	}
 
-	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale) {
+	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale, double tv) {
 		RealSignal psfd;
+
 		if (scale != 1) {
 			int pw = psfraw.getWidth();
 			int ph = psfraw.getHeight();
@@ -161,11 +165,16 @@ public class SACD_RL extends JDialog implements PlugIn {
 		} else {
 			psfd = build(psfraw);
 		}
-		RichardsonLucy rl = new RichardsonLucy(iterations);
+//		if (tv == 0) {
+//			RichardsonLucy rl = new RichardsonLucy(iterations);
+//		} else {
+//			RichardsonLucyTV rl = new RichardsonLucyTV(iterations, tv);
+//		}
+		RichardsonLucyTV rl = new RichardsonLucyTV(iterations, tv*1E-5);
 		RealSignal y = build(imp);
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
-//		resultplus.show();
+
 		return resultplus;
 	}
 

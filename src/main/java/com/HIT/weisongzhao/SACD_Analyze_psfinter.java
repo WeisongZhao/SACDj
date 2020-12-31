@@ -92,7 +92,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
 
 		gd.addMessage("For PSF:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
-		gd.addNumericField("NA", NA, 1);
+		gd.addNumericField("NA", NA, 2);
 		gd.addNumericField("Wave length (nm)", lambda, 0);
 		gd.addNumericField("Pixel size (nm)", lateralres, 2);
 

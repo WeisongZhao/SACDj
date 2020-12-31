@@ -67,8 +67,8 @@ public class RichardsonLucy extends Algorithm implements Callable<RealSignal> {
 		U.timesConjugate(H);
 		fft.inverse(U, u);
 		y_vector.times(u);
-
 		Operations.subtract(y_vector, x, v_vector);
+		x = y_vector.duplicate();
 
 		// iteration really start!
 		while (!controller.ends(x)) {
@@ -77,7 +77,6 @@ public class RichardsonLucy extends Algorithm implements Callable<RealSignal> {
 			float alphau = 0;
 			// For vector acceleration
 			x_update = y_vector.duplicate();
-			fft.transform(y_vector, U);
 			fft.transform(x, U);
 			U.times(H);
 			fft.inverse(U, u);
@@ -88,14 +87,14 @@ public class RichardsonLucy extends Algorithm implements Callable<RealSignal> {
 			y_vector.times(u);
 
 			vv_update = v_vector.duplicate();
-			Operations.subtract(x, y_vector, v_vector);
+			Operations.subtract(y_vector, x, v_vector);
 			for (int z = 0; z < y.nz; z++) {
 				for (int i = 0; i < y.nx * y.ny; i++) {
 					alphau += vv_update.data[z][i] * v_vector.data[z][i];
-					alphal += vv_update.data[z][i] * vv_update.data[z][i] + 1E-6;
+					alphal += vv_update.data[z][i] * vv_update.data[z][i];
 				}
 			}
-			alpha = alphau / alphal;
+			alpha = alphau / (alphal + (float) 1E-6);
 			if (alpha < 0)
 				alpha = (float) 1E-6;
 			if (alpha > 1)

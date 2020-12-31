@@ -267,7 +267,7 @@ public class Operations {
 		int nxy = s1.nx * s1.ny;
 		for(int k=0; k<s1.nz; k++)
 		for(int i=0; i<nxy; i++)
-			output.data[k][i] = s1.data[k][i] - s2.data[k][i];
+			Math.max(output.data[k][i] = s1.data[k][i] - s2.data[k][i],1E-6);
 	}
 	
 	public static RealSignal subtract(RealSignal s1, RealSignal s2) {
