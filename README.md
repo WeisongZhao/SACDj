@@ -3,22 +3,22 @@
 <h6 align="right">v1.1.3</h6>
 <h5 align="center">Fater super-resolution fluctuation imaging: SACD reconstruction with FIJI/ImageJ.</h5>
 </p>
-</br>
+<br>
 
 <p>
 <img src='/imgs/splash.png' align="left" width=170>
-</p>
+<p>
 
 
 This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDM](https://github.com/WeisongZhao/SACD2). If you find this useful, please cite the paper. <b>Weisong Zhao et al. SACD: Fater super-resolution fluctuation imaging,  X(X), XXX-XXX (2021)</b>
-</br>
-</br>
-</br>
+<br>
+<br>
+<br>
 
 <p>
 <img src='/imgs/imagej-128.png' align="right" width=50>
 </p>
-</br>
+<br>
 
 [Portal]() to the plugin.
 
