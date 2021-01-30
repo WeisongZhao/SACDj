@@ -169,6 +169,7 @@ public class KirchhoffDiffractionSimpson {
 		double[] I = new double[2];
 
 		OPD = NA * NA * defocus * rho * rho / (2.0 * ni);
+//		OPD = NA * defocus * rho / (2.0 * ni);
 		W = k0 * OPD;
 
 		// The real part

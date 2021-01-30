@@ -96,7 +96,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 		N = (int) gd.getNextNumber();
 		order = (int) gd.getNextNumber();
 		if (order > 4) {
-			IJ.error("Higher cumulants than 4th order are usually ugly");
+			IJ.error("Warnning! Higher cumulants than 4th order are usually ugly");
 			return;
 		} 
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);

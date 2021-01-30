@@ -59,7 +59,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 	private static double lateralres = 65;
 	private static double tv = 0;
 	private static int iterations1 = 10;
-	private static int iterations2 = 20;
+	private static int iterations2 = 5;
 	private static int skip = 20;
 	private static float scale = 2;
 	private static int N = 1;
@@ -114,7 +114,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
 		gd.addNumericField("Scale of PSF", scale, 1, 3, "2 (1~4)");
-		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (0~1)");
+		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (or 0.5)");
 		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack) frames");
 
@@ -136,7 +136,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		rollfactor = (int) gd.getNextNumber();
 
 		if (order > 4) {
-			IJ.error("Higher cumulants than 4th order are usually ugly");
+			IJ.error("Warnning! Higher cumulants than 4th order are usually ugly");
 			return;
 		}
 
@@ -146,7 +146,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 //		gd.addMessage("Note");
 		if (!showDialog())
 			return;
-		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, tv, N, order, scale, iterations2, subfactor,
+		SACD_recon(impY, NA - 0.3, lambda, lateralres, skip, iterations1, tv, N, order, scale, iterations2, subfactor,
 				rollfactor);
 	}
 
@@ -204,9 +204,9 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
-		ImageStack SACDstack = new ImageStack(w * N, h * N);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
+		ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
 
 			ImagePlus SACD;
@@ -228,7 +228,6 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
-				ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
 				SACD = RLDTV(cum, psf2, iterations2, scale, tv);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
@@ -380,6 +379,7 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 	}
 
 	public static ImagePlus CreatPSF(double NA, double lambda, double resLateral) {
+		NA = NA / 1.3;
 		int nx = 33, ny = 33;
 		// The center of the image in units of [pixels]
 		double x0 = (nx - 1) / 2.0;

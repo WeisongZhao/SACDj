@@ -56,13 +56,13 @@ import signalSACD.RealSignal;
 public class SACD_Analyze extends JDialog implements PlugIn {
 	private static int order = 2;
 	private static int iterations1 = 10;
-	private static int iterations2 = 20;
+	private static int iterations2 = 5;
 	private static double tv = 0;
 	private static int skip = 20;
 	private static float scale = 2;
 	private static int N = 1;
 	private static float subfactor = (float) 0.8;
-	private static int rollfactor = skip;
+	private static int rollfactor = 20;
 	protected ImagePlus impReconstruction;
 
 	@Override
@@ -125,7 +125,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		gd.addMessage("Advanced settings:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
 		gd.addNumericField("Scale of PSF", scale, 1, 3, "2 (1~4)");
-		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (0~1)");
+		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (or 0.5)");
 		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack) frames");
 
@@ -147,6 +147,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		order = (int) gd.getNextNumber();
 		scale = (float) gd.getNextNumber();
 		subfactor = (float) gd.getNextNumber();
+		tv = gd.getNextNumber();
 		rollfactor = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 		ImagePlus impA = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
@@ -155,11 +156,12 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 //		Prefs.set("SACD.sub", ifsub);
 //		gd.addMessage("Note");
 		if (order > 4) {
-			IJ.error("Higher cumulants than 4th order are usually ugly");
+			IJ.error("Warnning! Higher cumulants than 4th order are usually ugly");
 			return;
 		}
 		if (!showDialog())
 			return;
+
 		SACD_recon(impY, impA, impA2, skip, iterations1, tv, N, order, scale, iterations2, subfactor, rollfactor);
 	}
 
@@ -209,14 +211,15 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 //		SACDshow.show();
 //		IJ.showStatus("2nd Deconvolution");
 //	}
-	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1,double tv, int N, int order,
-			float scale, int iterations2, float subfactor, int rollfactor) {
+	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, double tv, int N,
+			int order, float scale, int iterations2, float subfactor, int rollfactor) {
+
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
-		ImageStack SACDstack = new ImageStack(w * N, h * N);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
+
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
 
 			ImagePlus SACD;
@@ -238,11 +241,11 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
 				ImagePlus cum = Cumulant(implarge, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
-				SACD = RLDTV(cum, psf2, iterations2, scale,tv);
+				SACD = RLDTV(cum, psf2, iterations2, scale, tv);
 			} else {
 				ImagePlus cum = Cumulant(imstep1plus, order, subfactor);
 				IJ.showStatus("2nd Deconvolution");
-				SACD = RLDTV(cum, psf, iterations2, scale,tv);
+				SACD = RLDTV(cum, psf, iterations2, scale, tv);
 			}
 
 			ImageStack imsReconstruction;
@@ -260,6 +263,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 					impReconstruction.setSlice(impReconstruction.getNSlices());
 			}
 		}
+
 	}
 
 	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale) {
@@ -570,8 +574,10 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		new ImageJ();
 		ImagePlus image = IJ.openImage();
 		ImagePlus psf = IJ.openImage();
+		ImagePlus psf2 = IJ.openImage();
 		image.show();
 		psf.show();
+		psf2.show();
 		IJ.runPlugIn(clazz.getName(), "");
 	}
 

@@ -51,7 +51,7 @@ import signalSACD.RealSignal;
 
 public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 	private static int iterations1 = 10;
-	private static int iterations2 = 20;
+	private static int iterations2 = 5;
 	private static int skip = 20;
 	private static int N = 1;
 	private static double NA = 1.4;
@@ -121,6 +121,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		N = (int) gd.getNextNumber();
 		iterations2 = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
+		
 		if (!showDialog())
 			return;
 		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, N, 2, 2, iterations2, (float) 0.5, skip);
