@@ -86,7 +86,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("Order", order, 0, 3, "(1~4)");
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack)");
-
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return;

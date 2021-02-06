@@ -51,7 +51,7 @@ import signalSACD.RealSignal;
 
 public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 	private static int iterations1 = 10;
-	private static int iterations2 = 5;
+	private static int iterations2 = 10;
 	private static int skip = 20;
 	private static int N = 1;
 	private static double NA = 1.4;
@@ -101,7 +101,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
 		gd.addNumericField("1st iterations (10)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
-		gd.addNumericField("2nd iterations (20)", iterations2, 0, 5, "times");
+		gd.addNumericField("2nd iterations (10)", iterations2, 0, 5, "times");
 
 //		boolean ifsub = Prefs.get("SACD.sub", false);
 //
@@ -183,7 +183,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
-		ImageStack SACDstack = new ImageStack(w * N, h * N);
+
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {

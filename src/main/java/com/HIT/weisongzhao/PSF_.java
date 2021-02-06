@@ -53,9 +53,7 @@ public class PSF_ extends JDialog implements PlugIn {
 		gd.addNumericField("NA", NA, 2);
 		gd.addNumericField("Wave length (nm)", lambda, 0);
 		gd.addNumericField("Pixel size (nm)", lateralres, 2);
-
-
-
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return;

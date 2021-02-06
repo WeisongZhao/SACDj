@@ -34,6 +34,7 @@ public class Fourier_Interpolation_plugin extends JDialog implements PlugIn {
 	private boolean showDialog() {
 		GenericDialog gd = new GenericDialog("Fourier interpolation");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return false;

@@ -56,7 +56,7 @@ import signalSACD.RealSignal;
 public class SACD_Analyze extends JDialog implements PlugIn {
 	private static int order = 2;
 	private static int iterations1 = 10;
-	private static int iterations2 = 5;
+	private static int iterations2 = 10;
 	private static double tv = 0;
 	private static int skip = 20;
 	private static float scale = 2;
@@ -120,7 +120,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
 		gd.addNumericField("1st iterations (10)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation (N)", N, 0, 3, "times");
-		gd.addNumericField("2nd iterations (20)", iterations2, 0, 5, "times");
+		gd.addNumericField("2nd iterations (10)", iterations2, 0, 5, "times");
 		gd.addMessage("__________________________________________________________");
 		gd.addMessage("Advanced settings:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 		gd.addNumericField("Order", order, 0, 3, "2 (1~4)");
@@ -128,7 +128,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		gd.addNumericField("Subtract factor", subfactor, 1, 5, "0.8 (or 0.5)");
 		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Rolling factor", rollfactor, 0, 5, "stack (1~stack) frames");
-
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 //		boolean ifsub = Prefs.get("SACD.sub", false);
 //
 //		String[] cbgl2 = new String[] { "Subtract mean value", };

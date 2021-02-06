@@ -88,7 +88,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 		gd.addNumericField("Pixel size (nm)", lateralres, 2);
 		gd.addNumericField("TV weight (value x 1e-5)", tv, 2);
 		gd.addNumericField("Iterations", iterations1, 0, 5, "times");
-
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 		gd.showDialog();
 		if (gd.wasCanceled())
 			return;
