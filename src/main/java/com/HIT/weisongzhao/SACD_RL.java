@@ -115,11 +115,10 @@ public class SACD_RL extends JDialog implements PlugIn {
 		psf.show();
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
+		ImageStack imstep1stack = new ImageStack(w, h);
 
 		for (int f = 0; f < t; f = f + 1) {
 
-			ImagePlus SACD;
-			ImageStack imstep1stack = new ImageStack(w, h);
 
 			IJ.showStatus("RL Deconvolution");
 			IJ.showProgress(f, t);

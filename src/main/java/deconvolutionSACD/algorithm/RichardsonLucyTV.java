@@ -125,6 +125,9 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		}
 		SignalCollector.free(H);
 		SignalCollector.free(U);
+		SignalCollector.free(gx);
+		SignalCollector.free(gy);
+		SignalCollector.free(gz);
 		SignalCollector.free(ggx);
 		SignalCollector.free(ggy);
 		SignalCollector.free(ggz);
@@ -134,6 +137,7 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		SignalCollector.free(v_vector);
 		SignalCollector.free(y_vector);
 		SignalCollector.free(vv_update);
+		SignalCollector.free(x_update);
 		return x;
 	}
 

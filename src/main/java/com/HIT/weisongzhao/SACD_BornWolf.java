@@ -201,17 +201,18 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1,
 			double tv, int N, int order, float scale, int iterations2, float subfactor, int rollfactor) {
 		ImagePlus psf = CreatPSF(NA, lambda, resLateral);
+		ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
+
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
-		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
-		ImagePlus psf2 = CreatPSF(NA, lambda, resLateral / N);
+
+		ImagePlus SACD;
+		ImageStack imstack = imp.getStack();
+
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
-
-			ImagePlus SACD;
 			ImageStack imstep1stack = new ImageStack(w, h);
-
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
 				IJ.showProgress(sk - f, skip);

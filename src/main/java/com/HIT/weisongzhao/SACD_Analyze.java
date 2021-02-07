@@ -213,18 +213,15 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 //	}
 	public void SACD_recon(ImagePlus imp, ImagePlus psf, ImagePlus psf2, int skip, int iterations1, double tv, int N,
 			int order, float scale, int iterations2, float subfactor, int rollfactor) {
-
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
 
+		ImagePlus SACD;
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
-
-			ImagePlus SACD;
 			ImageStack imstep1stack = new ImageStack(w, h);
-
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
 				IJ.showProgress(sk - f, skip);

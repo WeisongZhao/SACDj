@@ -121,7 +121,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		N = (int) gd.getNextNumber();
 		iterations2 = (int) gd.getNextNumber();
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
-		
+
 		if (!showDialog())
 			return;
 		SACD_recon(impY, NA, lambda, lateralres, skip, iterations1, N, 2, 2, iterations2, (float) 0.5, skip);
@@ -178,19 +178,16 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 //	}
 	public void SACD_recon(ImagePlus imp, double NA, double lambda, double resLateral, int skip, int iterations1, int N,
 			int order, float scale, int iterations2, float subfactor, int rollfactor) {
-
+		ImagePlus SACD;
+		ImageStack imstack = imp.getStack();
 		ImagePlus psf = SACD_BornWolf.CreatPSF(NA, lambda, resLateral);
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
-		ImageStack imstack = imp.getStack();
 		skip = Math.min(t, skip);
-
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
+
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
-
-			ImagePlus SACD;
 			ImageStack imstep1stack = new ImageStack(w, h);
-
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
 				IJ.showProgress(sk - f, skip);

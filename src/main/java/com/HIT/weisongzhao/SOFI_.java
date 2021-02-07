@@ -148,16 +148,14 @@ public class SOFI_ extends JDialog implements PlugIn {
 		skip = Math.min(t,skip);
 		int frame = imp.getStackSize() / skip;
 		rollfactor = Math.min(rollfactor,skip);
+		ImageStack inputstack = new ImageStack(w, h);
+		ImagePlus imstep1plus = new ImagePlus("", inputstack);
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
-
-			ImageStack imstep1stack = new ImageStack(w, h);
-			ImageStack inputstack = new ImageStack(w, h);
 			ImagePlus cum;
 			for (int sk = f; sk < f + skip; sk++) {
 				inputstack.addSlice("", imstack.getProcessor(sk + 1));
 			}
-			ImagePlus imstep1plus = new ImagePlus("", inputstack);
-
+		
 			if (N != 1) {
 				IJ.showStatus("Fourier Interpolation");
 				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
