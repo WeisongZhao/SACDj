@@ -4,5 +4,4 @@
 /target
 *.m
 *.csv
-/lib
 *.log
