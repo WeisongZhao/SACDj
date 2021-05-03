@@ -148,6 +148,8 @@ public class SOFI_ extends JDialog implements PlugIn {
 		skip = Math.min(t,skip);
 		int frame = imp.getStackSize() / skip;
 		rollfactor = Math.min(rollfactor,skip);
+		if ((skip - rollfactor) < rollfactor)
+			rollfactor = skip;
 		ImageStack inputstack = new ImageStack(w, h);
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
 			ImagePlus cum;

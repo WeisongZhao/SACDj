@@ -207,7 +207,9 @@ public class SACD_BornWolf extends JDialog implements PlugIn {
 		skip = Math.min(t, skip);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
-
+		if ((skip - rollfactor) < rollfactor)
+			rollfactor = skip;
+		
 		ImagePlus SACD;
 		ImageStack imstack = imp.getStack();
 

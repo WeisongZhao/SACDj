@@ -218,7 +218,8 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		skip = Math.min(t, skip);
 		int frame = t / skip;
 		rollfactor = Math.min(rollfactor, skip);
-
+		if ((skip - rollfactor) < rollfactor)
+			rollfactor = skip;
 		ImagePlus SACD;
 		for (int f = 0; f < frame * skip; f = f + rollfactor) {
 			ImageStack imstep1stack = new ImageStack(w, h);
