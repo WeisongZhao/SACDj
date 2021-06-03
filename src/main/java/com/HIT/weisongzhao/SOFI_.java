@@ -1,12 +1,12 @@
 /* 
-* Conditions of use: You are free to use this software for research or
+ * Conditions of use: You are free to use this software for research or
 
-* educational purposes. In addition, we expect you to include adequate
-* citations and acknowledgments whenever you present or publish results that
-* are based on it.
-* 
-* Reference: [1]. Weisong Zhao, et al. "SACD (2021).
-*/
+ * educational purposes. In addition, we expect you to include adequate
+ * citations and acknowledgments whenever you present or publish results that
+ * are based on it.
+ * 
+ * Reference: [1]. Weisong Zhao, et al. "SACD (2021).
+ */
 
 /*
  * Copyright 2020 Weisong Zhao.
@@ -42,15 +42,15 @@ import ij.Prefs;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
 import ij.plugin.PlugIn;
-import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import signalSACD.RealSignal;
+import signalSACD.SignalCollector;
 
 public class SOFI_ extends JDialog implements PlugIn {
 	private static int order = 2;
 	private static int skip = 500;
 	private static int N = 1;
-	private static int rollfactor = skip;
+	private static int rollfactor = 500;
 	protected ImagePlus impReconstruction;
 	@Override
 	public void run(String arg) {
@@ -95,13 +95,14 @@ public class SOFI_ extends JDialog implements PlugIn {
 		skip = (int) gd.getNextNumber();
 		N = (int) gd.getNextNumber();
 		order = (int) gd.getNextNumber();
+		rollfactor = (int) gd.getNextNumber();
 		if (order > 4) {
 			IJ.error("Warnning! Higher cumulants than 4th order are usually ugly");
 			return;
 		} 
 		ImagePlus impY = WindowManager.getImage(wList[gd.getNextChoiceIndex()]);
 
-//		gd.addMessage("Note");
+		//		gd.addMessage("Note");
 		if (!showDialog())
 			return;
 		SOFI_recon(impY, skip, N, order, rollfactor);
@@ -112,47 +113,45 @@ public class SOFI_ extends JDialog implements PlugIn {
 		return true;
 	}
 
-//	public void SOFI_recon(ImagePlus imp, int skip, int N, int order, int rollfactor) {
-//		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
-//		ImageStack imstack = imp.getStack();
-//		ImageStack SOFIstack = new ImageStack(w * N, h * N);
-//		skip = Math.min(t,skip);
-//		int frame = imp.getStackSize() / skip;
-//		rollfactor = Math.min(rollfactor,skip);
-//		for (int f = 0; f < frame * skip; f = f + rollfactor) {
-//
-//			ImageStack imstep1stack = new ImageStack(w, h);
-//			ImageStack inputstack = new ImageStack(w, h);
-//			ImagePlus cum;
-//			for (int sk = f; sk < f + skip; sk++) {
-//				inputstack.addSlice("", imstack.getProcessor(sk + 1));
-//			}
-//			ImagePlus imstep1plus = new ImagePlus("", inputstack);
-//
-//			if (N != 1) {
-//				IJ.showStatus("Fourier Interpolation");
-//				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
-//				cum = Cumulant(implarge, order);
-//			} else {
-//				cum = Cumulant(imstep1plus, order);
-//			}
-//			SOFIstack.addSlice("", cum.getProcessor());
-//		}
-//		ImagePlus SOFIshow = new ImagePlus("SOFI result", SOFIstack);
-//		SOFIshow.show();
-//	}
+	//	public void SOFI_recon(ImagePlus imp, int skip, int N, int order, int rollfactor) {
+	//		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
+	//		ImageStack imstack = imp.getStack();
+	//		ImageStack SOFIstack = new ImageStack(w * N, h * N);
+	//		skip = Math.min(t,skip);
+	//		int frame = imp.getStackSize() / skip;
+	//		rollfactor = Math.min(rollfactor,skip);
+	//		for (int f = 0; f < frame * skip; f = f + rollfactor) {
+	//
+	//			ImageStack imstep1stack = new ImageStack(w, h);
+	//			ImageStack inputstack = new ImageStack(w, h);
+	//			ImagePlus cum;
+	//			for (int sk = f; sk < f + skip; sk++) {
+	//				inputstack.addSlice("", imstack.getProcessor(sk + 1));
+	//			}
+	//			ImagePlus imstep1plus = new ImagePlus("", inputstack);
+	//
+	//			if (N != 1) {
+	//				IJ.showStatus("Fourier Interpolation");
+	//				ImagePlus implarge = FourierInterpolation(imstep1plus, N);
+	//				cum = Cumulant(implarge, order);
+	//			} else {
+	//				cum = Cumulant(imstep1plus, order);
+	//			}
+	//			SOFIstack.addSlice("", cum.getProcessor());
+	//		}
+	//		ImagePlus SOFIshow = new ImagePlus("SOFI result", SOFIstack);
+	//		SOFIshow.show();
+	//	}
 
 	public void SOFI_recon(ImagePlus imp, int skip, int N, int order, int rollfactor) {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
-		skip = Math.min(t,skip);
-		int frame = imp.getStackSize() / skip;
+		skip = Math.min(t,skip);	
 		rollfactor = Math.min(rollfactor,skip);
-		if ((skip - rollfactor) < rollfactor)
-			rollfactor = skip;
-		ImageStack inputstack = new ImageStack(w, h);
-		for (int f = 0; f < frame * skip; f = f + rollfactor) {
+		int frame = (t - skip)/ rollfactor + 1;		
+		for (int f = 0; f < frame * rollfactor; f = f + rollfactor) {
 			ImagePlus cum;
+			ImageStack inputstack = new ImageStack(w, h);
 			for (int sk = f; sk < f + skip; sk++) {
 				inputstack.addSlice("", imstack.getProcessor(sk + 1));
 			}
@@ -164,27 +163,31 @@ public class SOFI_ extends JDialog implements PlugIn {
 			} else {
 				cum = Cumulant(imstep1plus, order);
 			}
-			
-			ImageStack imsReconstruction;			
-			if (f == 0) {
-	            imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
-	            imsReconstruction.addSlice(cum.getProcessor());
-	            impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
-	            impReconstruction.show();
-	            Apply_LUT.applyLUT_redhot(impReconstruction);
-	        }
-	        else {
-	            imsReconstruction = impReconstruction.getImageStack();
-	            imsReconstruction.addSlice(cum.getProcessor());
-	            impReconstruction.setStack(imsReconstruction);
-	            if (impReconstruction.getSlice() >= impReconstruction.getNSlices()-1)
-	                impReconstruction.setSlice(impReconstruction.getNSlices());
-	        }
+			dealWithTimePointFrame(f, cum);
+			cum = null;
+//			IJ.run("Collect Garbage");
+		}
+		
+	}
+
+	protected void dealWithTimePointFrame(int f, ImagePlus cum) {
+		ImageStack imsReconstruction;			
+		if (f == 0) {
+			imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+			impReconstruction.show();
+			Apply_LUT.applyLUT_redhot(impReconstruction);
+		}
+		else {
+			imsReconstruction = impReconstruction.getImageStack();
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction.setStack(imsReconstruction);
+			if (impReconstruction.getSlice() >= impReconstruction.getNSlices()-1)
+				impReconstruction.setSlice(impReconstruction.getNSlices());
 		}
 	}
-	
 
-	
 	// Fourier Interpolation
 	public static ImagePlus FourierInterpolation(ImagePlus imp, int N) {
 		int w = imp.getWidth(), h = imp.getHeight(), d = imp.getImageStackSize();
@@ -230,7 +233,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 			result.addSlice("", cutScale(b, w, h, N));
 		}
 		ImagePlus image = new ImagePlus("Fourier interpolated", result);
-//		image.show();
+		//		image.show();
 		return image;
 	}
 
@@ -326,7 +329,7 @@ public class SOFI_ extends JDialog implements PlugIn {
 			for (int j = ow; j < w; j++) {
 				large[j * 2 + i * lx * 2 + (N) * w * 2 * (N - 1) * h + (N - 1) * w * 2] = input[j * 2 + i * w * 2];
 				large[j * 2 + i * lx * 2 + (N) * w * 2 * (N - 1) * h + (N - 1) * w * 2 + 1] = input[j * 2 + i * w * 2
-						+ 1];
+				                                                                                    + 1];
 			}
 		}
 		return large;
@@ -408,7 +411,9 @@ public class SOFI_ extends JDialog implements PlugIn {
 		ImageStack result = new ImageStack(w, h);
 		result.addSlice("", Cum);
 		ImagePlus image = new ImagePlus("Cumulant result", result);
-//		image.show();
+		//		image.show();
+		SignalCollector.free(raw);
+		Cum = null;
 		return image;
 	}
 
@@ -426,16 +431,16 @@ public class SOFI_ extends JDialog implements PlugIn {
 		return signal;
 	}
 
-	private ImagePlus build(RealSignal signal) {
-		if (signal == null)
-			return null;
-		ImageStack stack = new ImageStack(signal.nx, signal.ny);
-		for (int k = 0; k < signal.nz; k++) {
-			ImageProcessor ip = new FloatProcessor(signal.nx, signal.ny, signal.getXY(k));
-			stack.addSlice(ip);
-		}
-		return new ImagePlus("", stack);
-	}
+	//	private ImagePlus build(RealSignal signal) {
+	//		if (signal == null)
+	//			return null;
+	//		ImageStack stack = new ImageStack(signal.nx, signal.ny);
+	//		for (int k = 0; k < signal.nz; k++) {
+	//			ImageProcessor ip = new FloatProcessor(signal.nx, signal.ny, signal.getXY(k));
+	//			stack.addSlice(ip);
+	//		}
+	//		return new ImagePlus("", stack);
+	//	}
 
 	public static void main(String[] args) {
 

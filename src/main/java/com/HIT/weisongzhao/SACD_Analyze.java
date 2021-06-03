@@ -215,18 +215,16 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			int order, float scale, int iterations2, float subfactor, int rollfactor) {
 		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
 		ImageStack imstack = imp.getStack();
-		skip = Math.min(t, skip);
-		int frame = t / skip;
-		rollfactor = Math.min(rollfactor, skip);
-		if ((skip - rollfactor) < rollfactor)
-			rollfactor = skip;
+		skip = Math.min(t,skip);	
+		rollfactor = Math.min(rollfactor,skip);
+		int frame = (t - skip)/ rollfactor + 1;
 		ImagePlus SACD;
-		for (int f = 0; f < frame * skip; f = f + rollfactor) {
+		for (int f = 0; f < frame * rollfactor; f = f + rollfactor) {
 			ImageStack imstep1stack = new ImageStack(w, h);
+			ImageStack inputstack = new ImageStack(w, h);
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
-				IJ.showProgress(sk - f, skip);
-				ImageStack inputstack = new ImageStack(w, h);
+				IJ.showProgress(sk - f, skip);				
 				inputstack.addSlice("", imstack.getProcessor(sk + 1));
 				ImagePlus input = new ImagePlus("", inputstack);
 				ImagePlus imstep1 = RLD(input, psf, iterations1, 1);
@@ -245,25 +243,27 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 				IJ.showStatus("2nd Deconvolution");
 				SACD = RLDTV(cum, psf, iterations2, scale, tv);
 			}
-
-			ImageStack imsReconstruction;
-			if (f == 0) {
-				imsReconstruction = new ImageStack(SACD.getWidth(), SACD.getHeight());
-				imsReconstruction.addSlice(SACD.getProcessor());
-				impReconstruction = new ImagePlus("SACD result", imsReconstruction);
-				impReconstruction.show();
-				Apply_LUT.applyLUT_redhot(impReconstruction);
-			} else {
-				imsReconstruction = impReconstruction.getImageStack();
-				imsReconstruction.addSlice(SACD.getProcessor());
-				impReconstruction.setStack(imsReconstruction);
-				if (impReconstruction.getSlice() >= impReconstruction.getNSlices() - 1)
-					impReconstruction.setSlice(impReconstruction.getNSlices());
-			}
+			dealWithTimePointFrame(f, SACD);
 		}
 
 	}
-
+	protected void dealWithTimePointFrame(int f, ImagePlus cum) {
+		ImageStack imsReconstruction;			
+		if (f == 0) {
+			imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+			impReconstruction.show();
+			Apply_LUT.applyLUT_redhot(impReconstruction);
+		}
+		else {
+			imsReconstruction = impReconstruction.getImageStack();
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction.setStack(imsReconstruction);
+			if (impReconstruction.getSlice() >= impReconstruction.getNSlices()-1)
+				impReconstruction.setSlice(impReconstruction.getNSlices());
+		}
+	}
 	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale) {
 		RealSignal psfd;
 		if (scale != 1) {

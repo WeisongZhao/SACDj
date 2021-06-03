@@ -127,25 +127,29 @@ public class SACD_RL extends JDialog implements PlugIn {
 			imstep1stack.addSlice("", imstep1.getStack().getProcessor(1));
 
 			ImagePlus imstep1plus = new ImagePlus("", imstep1stack);
-
-			ImageStack imsReconstruction;
-			if (f == 0) {
-				imsReconstruction = new ImageStack(imstep1plus.getWidth(), imstep1plus.getHeight());
-				imsReconstruction.addSlice(imstep1plus.getProcessor());
-				impReconstruction = new ImagePlus("RL deconvolution", imsReconstruction);
-				impReconstruction.show();
-				Apply_LUT.applyLUT_redhot(impReconstruction);
-			} else {
-				imsReconstruction = impReconstruction.getImageStack();
-				imsReconstruction.addSlice(imstep1plus.getProcessor());
-				impReconstruction.setStack(imsReconstruction);
-				if (impReconstruction.getSlice() >= impReconstruction.getNSlices() - 1)
-					impReconstruction.setSlice(impReconstruction.getNSlices());
-			}
+			dealWithTimePointFrame(f, imstep1plus);
+			imstep1plus = null;
 		}
 
 	}
-
+	
+	protected void dealWithTimePointFrame(int f, ImagePlus cum) {
+		ImageStack imsReconstruction;			
+		if (f == 0) {
+			imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+			impReconstruction.show();
+			Apply_LUT.applyLUT_redhot(impReconstruction);
+		}
+		else {
+			imsReconstruction = impReconstruction.getImageStack();
+			imsReconstruction.addSlice(cum.getProcessor());
+			impReconstruction.setStack(imsReconstruction);
+			if (impReconstruction.getSlice() >= impReconstruction.getNSlices()-1)
+				impReconstruction.setSlice(impReconstruction.getNSlices());
+		}
+	}
 	private ImagePlus RLD(ImagePlus imp, ImagePlus psfraw, int iterations, float scale, double tv) {
 		RealSignal psfd;
 
