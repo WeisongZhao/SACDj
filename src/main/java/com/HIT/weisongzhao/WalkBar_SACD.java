@@ -19,7 +19,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultCaret;
 
-public class WalkBar
+public class WalkBar_SACD
   extends JToolBar
   implements ActionListener
 {
@@ -92,19 +92,19 @@ public class WalkBar
     }
   }
   
-  public WalkBar()
+  public WalkBar_SACD()
   {
     super("Walk Bar");
     build("", false, false, false, 100);
   }
   
-  public WalkBar(String initialMessage, boolean isAbout, boolean isHelp, boolean isClose)
+  public WalkBar_SACD(String initialMessage, boolean isAbout, boolean isHelp, boolean isClose)
   {
     super("Walk Bar");
     build(initialMessage, isAbout, isHelp, isClose, 100);
   }
   
-  public WalkBar(String initialMessage, boolean isAbout, boolean isHelp, boolean isClose, int size)
+  public WalkBar_SACD(String initialMessage, boolean isAbout, boolean isHelp, boolean isClose, int size)
   {
     super("Walk Bar");
     build(initialMessage, isAbout, isHelp, isClose, size);

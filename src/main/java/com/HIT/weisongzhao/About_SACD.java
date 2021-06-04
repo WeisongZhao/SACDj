@@ -7,9 +7,9 @@ import ij.IJ;
 import ij.ImageJ;
 import ij.plugin.PlugIn;
 
-public class About_ extends JDialog implements PlugIn {
+public class About_SACD extends JDialog implements PlugIn {
 	private String defaultMessage = "(c) 2020 	HIT";
-	private WalkBar walk = new WalkBar(this.defaultMessage, true, false, true);
+	private WalkBar_SACD walk = new WalkBar_SACD(this.defaultMessage, true, false, true);
 
 	@Override
 	public void run(String arg) {
@@ -33,7 +33,7 @@ public class About_ extends JDialog implements PlugIn {
 
 	public static void main(String[] args) {
 
-		Class<?> clazz = About_.class;
+		Class<?> clazz = About_SACD.class;
 
 		// start ImageJ
 		new ImageJ();
