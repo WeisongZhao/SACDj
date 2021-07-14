@@ -138,7 +138,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 		if (f == 0) {
 			imsReconstruction = new ImageStack(cum.getWidth(), cum.getHeight());
 			imsReconstruction.addSlice(cum.getProcessor());
-			impReconstruction = new ImagePlus("SOFI result", imsReconstruction);
+			impReconstruction = new ImagePlus("RL result", imsReconstruction);
 			impReconstruction.show();
 			Apply_LUT.applyLUT_redhot(impReconstruction);
 		}
