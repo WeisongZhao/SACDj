@@ -37,7 +37,7 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 ## SACD reconstruction
 
 <p align='center'>
-<img src='./imgs/SACD model.png' align="center" width=900>
+<img src='./imgs/Fig1.png' align="center" width=900>
 </p>
 
 
