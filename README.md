@@ -18,11 +18,11 @@
 <br>
 
 <p>
-<img src='./imgs/splash.png' align="left" width=170>
+<img src='./imgs/splash.png' align="left" width=160>
 <p>
 
 
-This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDm](https://github.com/WeisongZhao/SACDm). It is a part of publication. For details, please refer to: [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for fast high-throughput and four-dimensional live-cell super-resolution imaging, Science, X, XXX-XXX (2021)](https://www.science.org/).</b>Please cite PANEL in your publications, if it helps your research.
+This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDm](https://github.com/WeisongZhao/SACDm). It is a part of publication. For details, please refer to: [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for fast high-throughput and four-dimensional live-cell super-resolution imaging, Science, X, XXX-XXX (2021)](https://www.science.org/). Please cite PANEL in your publications, if it helps your research.
 <br>
 <br>
 <br>
