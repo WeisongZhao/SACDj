@@ -1,3 +1,15 @@
+
+[![website](https://img.shields.io/badge/website-up-green.svg)](https://weisongzhao.github.io/SACDj/)
+[![paper](https://img.shields.io/badge/paper-science-black.svg)](https://www.science.org/)
+[![Github commit](https://img.shields.io/github/last-commit/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/)
+[![License](https://img.shields.io/github/license/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/blob/master/LICENSE/)<br>
+[![Twitter](https://img.shields.io/twitter/follow/weisong_zhao?label=weisong)](https://twitter.com/weisong_zhao/status/1370308101690118146)
+[![GitHub watchers](https://img.shields.io/github/watchers/WeisongZhao/SACDj?style=social)](https://github.com/WeisongZhao/SACDj/) 
+[![GitHub stars](https://img.shields.io/github/stars/WeisongZhao/SACDj?style=social)](https://github.com/WeisongZhao/SACDj/) 
+[![GitHub forks](https://img.shields.io/github/forks/WeisongZhao/SACDj?style=social)](https://github.com/WeisongZhao/SACDj/)
+
+
+
 <p>
 <h1 align="center">SACD<font color="#b07219">j</font></h1>
 <h6 align="right">v1.1.3</h6>
@@ -10,7 +22,7 @@
 <p>
 
 
-This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDm](https://github.com/WeisongZhao/SACDm). It is a part of publication. For details, please refer to: <b>Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for fast high-throughput and four-dimensional live-cell super-resolution imaging, X(X), XXX-XXX (2021)</b>
+This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDm](https://github.com/WeisongZhao/SACDm). It is a part of publication. For details, please refer to: [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for fast high-throughput and four-dimensional live-cell super-resolution imaging, Science, X, XXX-XXX (2021)](https://www.science.org/).</b>Please cite PANEL in your publications, if it helps your research.
 <br>
 <br>
 <br>
