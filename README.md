@@ -10,7 +10,7 @@
 <p>
 
 
-This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDM](https://github.com/WeisongZhao/SACD2). If you find this useful, please cite the paper. <b>Weisong Zhao et al. SACD: Fater super-resolution fluctuation imaging,  X(X), XXX-XXX (2021)</b>
+This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. The full SACD can be found in [SACDM](https://github.com/WeisongZhao/SACDm). If you find this useful, please cite the paper. <b>Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for fast high-throughput and four-dimensional live-cell super-resolution imaging,  X(X), XXX-XXX (2021)</b>
 <br>
 <br>
 <br>
@@ -32,7 +32,7 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 ## Declaration
 This repository contains the java source code (Maven) for <b>SACD</b> imagej plugin.  This plugin is for the <b>Simplified SACD</b> (w/o sparse deconvolution), and is also accompanied with conventional <b>SOFI</b> calculation. The development of this imagej plugin is work in progress, so expect rough edges. 
 
-If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matlab version) is recommended. Due to the distance between the Fourier interpolation, deconvolution of <b>SACDj</b>, and <b>SACDM</b>, there may exist a gap between the results of <b>SACDM</b> and <b>SACDj</b>. To me, the implementations of  <b>SACDM</b>  are more flexible and accurate. 
+If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matlab version) is recommended. Due to the distance between the Fourier interpolation, deconvolution of <b>SACDj</b>, and <b>SACDM</b>, there may exist a gap between the results of <b>SACDM</b> and <b>SACDj</b>. To me, the implementations of <b>SACDM</b> are more flexible and accurate. 
 
 
 <details>
@@ -47,4 +47,4 @@ If you want to reproduce the results of SACD publication, the <b>SACDM</b> (Matl
 </details>
 
 ## Open source [SACDj](https://github.com/WeisongZhao/SACDj)
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+This software and corresponding methods can only be used for **non-commercial** use, and they are under Open Data Commons Open Database License v1.0.
