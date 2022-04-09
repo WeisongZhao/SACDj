@@ -1,31 +1,27 @@
-/* 
-* Conditions of use: You are free to use this software for research or
-
-
-* educational purposes. In addition, we expect you to include adequate
-* citations and acknowledgments whenever you present or publish results that
-* are based on it.
-* 
-* Reference: [1]. Weisong Zhao, et al. "SACD (2021).
-*/
-
-/*
- * Copyright 2020 Weisong Zhao.
- * 
- * This file is part of SACD Analyze plugin (SACD).
- * 
- * SACD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * SACD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * SACD. If not, see <http://www.gnu.org/licenses/>.
- */
+// Conditions of use: You are free to use this software for research or
+// educational purposes. In addition, we expect you to include adequate
+// citations and acknowledgments whenever you present or publish results that
+// are based on it.
+//% *********************************************************************************
+//% It is a part of publication:
+//% Weisong Zhao et al. High-throughput and four-dimensional 
+//% live-cell super-resolution imaging,
+//% Science (2022).
+//% *********************************************************************************
+//%    Copyright 2019~2022 Weisong Zhao et al.
+//%
+//%    This program is free software: you can redistribute it and/or modify
+//%    it under the terms of the Open Data Commons Open Database License v1.0.
+//%
+//%    This program is distributed in the hope that it will be useful,
+//%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//%    Open Data Commons Open Database License for more details.
+//%
+//%    You should have received a copy of the
+//%    Open Data Commons Open Database License
+//%    along with this program.  If not, see:
+//%    <https://opendatacommons.org/licenses/odbl/>.
 
 package com.HIT.weisongzhao;
 
@@ -54,7 +50,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 	private static int iterations1 = 10;
 	private static int iterations2 = 10;
 	private static int skip = 20;
-	private static int N = 1;
+	private static int N = 2;
 	private static double NA = 1.4;
 	private static double lambda = 561;
 	private static double lateralres = 65;
@@ -187,11 +183,11 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		rollfactor = Math.min(rollfactor,skip);
 		int frame = (t - skip)/ rollfactor + 1;
 		for (int f = 0; f < frame * rollfactor; f = f + rollfactor) {
-			ImageStack imstep1stack = new ImageStack(w, h);
-			ImageStack inputstack = new ImageStack(w, h);
+			ImageStack imstep1stack = new ImageStack(w, h);			
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
 				IJ.showProgress(sk - f, skip);
+				ImageStack inputstack = new ImageStack(w, h);
 				inputstack.addSlice("", imstack.getProcessor(sk + 1));
 				ImagePlus input = new ImagePlus("", inputstack);
 				ImagePlus imstep1 = RLD(input, psf, iterations1, 1);
@@ -213,7 +209,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 			}
 			dealWithTimePointFrame(f, SACD);
 		}
-
+		SignalCollector.clear();
 	}
 	protected void dealWithTimePointFrame(int f, ImagePlus cum) {
 		ImageStack imsReconstruction;			
@@ -252,6 +248,10 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
 //		resultplus.show();
+		SignalCollector.free(result);
+		SignalCollector.free(psfd);
+		SignalCollector.free(y);
+		SignalCollector.clear();
 		return resultplus;
 	}
 
@@ -332,7 +332,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		ImagePlus image = new ImagePlus("Cumulant result", result);
 //		image.show();
 		SignalCollector.free(raw);
-		Cum = null;
+		Cum = null;		
 		return image;
 	}
 

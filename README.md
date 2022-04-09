@@ -58,7 +58,8 @@ If you want to reproduce the results of SACD publication, the [SACDm](https://gi
 
 
 ## Version
-- v1.1.3 Useful tools separated: RL deconvolution, PSF calculation, SOFI reconstruction & Fourier interpolation  
+- v1.1.3 Fixed for memory recycle & 20 times execution acceleration  
+- v1.1.0 Useful tools separated: RL deconvolution, PSF calculation, SOFI reconstruction & Fourier interpolation  
 - v1.0.0 Simplified SACD
 - v0.6.0 Accelerated RL-TV deconvolution
 - v0.5.0 Accelerated RL deconvolution

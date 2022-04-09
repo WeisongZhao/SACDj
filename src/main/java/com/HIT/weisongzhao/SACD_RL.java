@@ -39,6 +39,7 @@ import ij.plugin.PlugIn;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import signalSACD.RealSignal;
+import signalSACD.SignalCollector;
 
 public class SACD_RL extends JDialog implements PlugIn {
 	private static int iterations1 = 10;
@@ -109,13 +110,13 @@ public class SACD_RL extends JDialog implements PlugIn {
 
 		ImagePlus psf = SACD_BornWolf.CreatPSF(NA, lambda, resLateral);
 		psf.show();
-		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();
-		ImageStack imstack = imp.getStack();
+		int w = imp.getWidth(), h = imp.getHeight(), t = imp.getStackSize();		
 		for (int f = 0; f < t; f = f + 1) {
 
 			ImageStack imstep1stack = new ImageStack(w, h);
 			IJ.showStatus("RL Deconvolution");
 			IJ.showProgress(f, t);
+			ImageStack imstack = imp.getStack();
 			ImageStack inputstack = new ImageStack(w, h);
 			inputstack.addSlice("", imstack.getProcessor(f + 1));
 			ImagePlus input = new ImagePlus("", inputstack);
@@ -126,6 +127,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 			dealWithTimePointFrame(f, imstep1plus);
 			imstep1plus = null;
 		}
+		SignalCollector.clear();
 
 	}
 	
@@ -171,7 +173,10 @@ public class SACD_RL extends JDialog implements PlugIn {
 		RealSignal y = build(imp);
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
-
+		SignalCollector.free(result);
+		SignalCollector.free(psfd);
+		SignalCollector.free(y);		
+		SignalCollector.clear();
 		return resultplus;
 	}
 

@@ -109,6 +109,7 @@ public class RichardsonLucy extends Algorithm implements Callable<RealSignal> {
 		SignalCollector.free(v_vector);
 		SignalCollector.free(y_vector);
 		SignalCollector.free(vv_update);
+		SignalCollector.free(y);
 		return x;
 	}
 

@@ -47,6 +47,7 @@ import ij.plugin.PlugIn;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
 import signalSACD.RealSignal;
+import signalSACD.SignalCollector;
 
 public class SACD_Analyze extends JDialog implements PlugIn {
 	private static int order = 2;
@@ -55,7 +56,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 	private static double tv = 0;
 	private static int skip = 20;
 	private static float scale = 2;
-	private static int N = 1;
+	private static int N = 2;
 	private static float subfactor = (float) 0.8;
 	private static int rollfactor = 20;
 	protected ImagePlus impReconstruction;
@@ -216,10 +217,11 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		ImagePlus SACD;
 		for (int f = 0; f < frame * rollfactor; f = f + rollfactor) {
 			ImageStack imstep1stack = new ImageStack(w, h);
-			ImageStack inputstack = new ImageStack(w, h);
+			
 			for (int sk = f; sk < f + skip; sk++) {
 				IJ.showStatus("1st Deconvolution");
-				IJ.showProgress(sk - f, skip);				
+				IJ.showProgress(sk - f, skip);
+				ImageStack inputstack = new ImageStack(w, h);
 				inputstack.addSlice("", imstack.getProcessor(sk + 1));
 				ImagePlus input = new ImagePlus("", inputstack);
 				ImagePlus imstep1 = RLD(input, psf, iterations1, 1);
@@ -240,7 +242,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 			}
 			dealWithTimePointFrame(f, SACD);
 		}
-
+		SignalCollector.clear();
 	}
 	protected void dealWithTimePointFrame(int f, ImagePlus cum) {
 		ImageStack imsReconstruction;			
@@ -279,6 +281,10 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
 //		resultplus.show();
+		SignalCollector.free(result);
+		SignalCollector.free(psfd);
+		SignalCollector.free(y);
+		SignalCollector.clear();
 		return resultplus;
 	}
 
@@ -303,6 +309,10 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		RealSignal result = rl.run(y, psfd);
 		ImagePlus resultplus = build(result);
 //		resultplus.show();
+		SignalCollector.free(result);
+		SignalCollector.free(psfd);
+		SignalCollector.free(y);
+		SignalCollector.clear();
 		return resultplus;
 	}
 
@@ -529,6 +539,7 @@ public class SACD_Analyze extends JDialog implements PlugIn {
 		result.addSlice("", Cum);
 		ImagePlus image = new ImagePlus("Cumulant result", result);
 //		image.show();
+		SignalCollector.free(raw);
 		return image;
 	}
 

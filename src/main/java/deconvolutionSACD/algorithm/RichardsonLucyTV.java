@@ -60,13 +60,12 @@ public class RichardsonLucyTV extends Algorithm implements Callable<RealSignal> 
 		RealSignal ggx = y.duplicate();
 		RealSignal ggy = y.duplicate();
 		RealSignal ggz = y.duplicate();
-
-		RealSignal u = gx; // resued memory
-		RealSignal p = gy; // resued memory
-		RealSignal tv = gz; // resued memory
-
-		RealSignal y_vector = y.duplicate();
+		RealSignal u = y.duplicate();
+		RealSignal p = y.duplicate();
+		RealSignal tv = y.duplicate();
+		
 		// For vector acceleration
+		RealSignal y_vector = y.duplicate();
 		RealSignal v_vector = new RealSignal("x", y.nx, y.ny, y.nz);
 		RealSignal vv_update = v_vector.duplicate();
 		RealSignal x_update = v_vector.duplicate();
