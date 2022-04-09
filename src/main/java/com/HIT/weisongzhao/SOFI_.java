@@ -1,30 +1,27 @@
-/* 
- * Conditions of use: You are free to use this software for research or
-
- * educational purposes. In addition, we expect you to include adequate
- * citations and acknowledgments whenever you present or publish results that
- * are based on it.
- * 
- * Reference: [1]. Weisong Zhao, et al. "SACD (2021).
- */
-
-/*
- * Copyright 2020 Weisong Zhao.
- * 
- * This file is part of SACD Analyze plugin (SACD).
- * 
- * SACD is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
- * SACD is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * SACD. If not, see <http://www.gnu.org/licenses/>.
- */
+// Conditions of use: You are free to use this software for research or
+// educational purposes. In addition, we expect you to include adequate
+// citations and acknowledgments whenever you present or publish results that
+// are based on it.
+//% *********************************************************************************
+//% It is a part of publication:
+//% Weisong Zhao et al. High-throughput and four-dimensional 
+//% live-cell super-resolution imaging,
+//% Science (2022).
+//% *********************************************************************************
+//%    Copyright 2019~2022 Weisong Zhao et al.
+//%
+//%    This program is free software: you can redistribute it and/or modify
+//%    it under the terms of the Open Data Commons Open Database License v1.0.
+//%
+//%    This program is distributed in the hope that it will be useful,
+//%    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+//%    Open Data Commons Open Database License for more details.
+//%
+//%    You should have received a copy of the
+//%    Open Data Commons Open Database License
+//%    along with this program.  If not, see:
+//%    <https://opendatacommons.org/licenses/odbl/>.
 
 package com.HIT.weisongzhao;
 

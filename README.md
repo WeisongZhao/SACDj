@@ -40,12 +40,38 @@ This repository is for Simplified SACD (w/o sparse deconvolution) and will be in
 <img src='./imgs/Fig1.png' align="center" width=900>
 </p>
 
+## Instruction
+
+- Tips: Regarding the SACD SR frame visualization, it can be scaled with a gamma correction according to the bSOFI setting.
+```python
+In FIJI/ImageJ: Process->Math->gamma(0.5)
+```
+- Tips: If data contains strong background, a pre background subtraction will help.
+```python
+In FIJI/ImageJ: Process->Subtract background
+```
 
 ## Declaration
-This repository contains the java source code (Maven) for <b>SACD</b> imagej plugin.  This plugin is for the <b>Simplified SACD</b> (w/o sparse deconvolution), and is also accompanied with conventional <b>SOFI reconstruction</b> ; <b>RL deconvolution</b>; and <b>PSF calculation</b> features. The development of this imagej plugin is work in progress, so expect rough edges. 
+This repository contains the java source code (Maven) for <b>SACD</b> imagej plugin.  This plugin is for the <b>Simplified SACD</b> (w/o Sparse deconvolution), and is also accompanied with conventional <b>SOFI reconstruction</b> ; <b>RL deconvolution</b>; and <b>PSF calculation</b> features. The development of this imagej plugin is work in progress, so expect rough edges. 
 
-If you want to reproduce the results of SACD publication, the [SACDm](https://github.com/WeisongZhao/SACDm) (Matlab version) is recommended. Due to the distance between the Fourier interpolation, deconvolution of <b>SACDj</b>, and <b>SACDm</b>, there may exist a gap between the results of <b>SACDm</b> and <b>SACDj</b>. To me, the implementations of <b>SACDm</b> are more flexible and accurate. 
+If you want to reproduce the results of SACD publication, the [SACDm](https://github.com/WeisongZhao/SACDm) (Matlab version) is recommended. Due to the distance between the Fourier interpolation, deconvolution of <b>SACDj</b>, and <b>SACDm</b>, there may exist a gap between the results of <b>SACDm</b> and <b>SACDj</b>. To me, the implementations of <b>SACDm</b> are more flexible and accurate.
 
+
+## Version
+- v1.1.3 Useful tools separated: RL deconvolution, PSF calculation, SOFI reconstruction & Fourier interpolation  
+- v1.0.0 Simplified SACD
+- v0.6.0 Accelerated RL-TV deconvolution
+- v0.5.0 Accelerated RL deconvolution
+- v0.4.0 Born-Wolf PSF
+- v0.3.0 SACD core
+- v0.2.0 Fourier interpolation
+- v0.1.0 Cumulant reconstruction core
+
+## Related links: 
+- MATLAB version of SACD: [SACDm](https://github.com/WeisongZhao/SACDm)
+- **Some fancy results and comparisons:** [my website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html)
+- **Preprint:** [COMING SOON...](#)
+- **Reference:**
 
 <details>
 <summary><b>Plans</b></summary>
@@ -54,7 +80,6 @@ If you want to reproduce the results of SACD publication, the [SACDm](https://gi
 - Remove redundant code and reconsitution ugly code. (in progress)
 - ~~Accelarated RL deconvolution.~~
 - ~~Accelarated RL-TV deconvolution.~~
-- Another type of interpolation, 3D XC type calculation will be added.
 - Add sparse deconvolution.
 </details>
 
