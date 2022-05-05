@@ -22,7 +22,7 @@
 <p>
 
 
-This repository is for Simplified SACD (w/o sparse deconvolution) and will be in continued development. It is a part of publication. For details, please refer to: [Weisong Zhao et al. High-throughput add-on super-resolution by enhancing detectable fluctuation, XXX (2022)](https://www.nature.com). Please cite SACD in your publications, if it helps your research.
+This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in continued development. It is a part of publication. For details, please refer to: [Weisong Zhao et al. High-throughput add-on super-resolution by enhancing detectable fluctuation, XXX (2022)](https://www.nature.com). Please cite SACD in your publications, if it helps your research.
 <br>
 <br>
 <br>
