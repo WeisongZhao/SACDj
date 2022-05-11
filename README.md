@@ -1,6 +1,6 @@
 
 [![website](https://img.shields.io/badge/website-up-green.svg)](https://weisongzhao.github.io/SACDj/)
-[![paper](https://img.shields.io/badge/paper-nature-black.svg)](https://www.nature.com)
+[![paper](https://img.shields.io/badge/paper-nature%20methods-black.svg)](https://www.nature.com)
 [![Github commit](https://img.shields.io/github/last-commit/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/)
 [![License](https://img.shields.io/github/license/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/blob/master/LICENSE/)<br>
 [![Twitter](https://img.shields.io/twitter/follow/weisong_zhao?label=weisong)](https://twitter.com/weisong_zhao/status/1370308101690118146)
@@ -39,6 +39,11 @@ This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in
 <p align='center'>
 <img src='./imgs/Fig1.png' align="center" width=900>
 </p>
+
+<p align='center'>
+<img src='./imgs/SACDj demo.png' align="center" width=900>
+</p>
+
 
 ## Instruction
 
