@@ -18,7 +18,7 @@ public class About_SACD extends JDialog implements PlugIn {
 				"Weisong Zhao",
 				"<p style=\"text-align:left\">"
 				+ "<b>It is a part of publication:</b>"
-				+ "<br>Weisong Zhao, et al. High-throughput and four-dimensional live-cell super-resolution imaging, <i>Science</i> (2022)."				
+				+ "<br>Weisong Zhao, et al. High-throughput add-on super-resolution by enhancing detectable fluctuation, <i>Nature Methods</i> (2022)."				
 				+ "<br><br><b>Acknowledgements:</b><br>This plugin is for SACD reconstruction (w/o Sparse deconvolution). Please cite PANEL in your publications, if it helps your research."
 				+ "<br><br><b>Open source:</b><br>https://github.com/WeisongZhao/SACDj"
 				+ "<br><br><b>Used resources:</b>"
