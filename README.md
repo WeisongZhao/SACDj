@@ -45,6 +45,7 @@ This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in
 <img src='./imgs/SACDj demo.png' align="center" width=900>
 </p>
 
+These two demos can be found at the [release v1.1.3](https://github.com/WeisongZhao/SACDj/releases/tag/v1.1.3).
 
 ## Instruction
 
