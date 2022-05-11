@@ -40,6 +40,7 @@ This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in
 <img src='./imgs/Fig1.png' align="center" width=900>
 </p>
 
+## SACD demo
 <p align='center'>
 <img src='./imgs/SACDj demo.png' align="center" width=900>
 </p>
