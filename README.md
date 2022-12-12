@@ -1,6 +1,6 @@
 
 [![website](https://img.shields.io/badge/website-up-green.svg)](https://weisongzhao.github.io/SACDj/)
-[![paper](https://img.shields.io/badge/paper-nature%20methods-black.svg)](https://www.nature.com)
+[![paper](https://img.shields.io/badge/paper-nature%20biotechnol.-black.svg)](https://www.nature.com)
 [![Github commit](https://img.shields.io/github/last-commit/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/)
 [![License](https://img.shields.io/github/license/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/blob/master/LICENSE.txt)<br>
 [![Twitter](https://img.shields.io/twitter/follow/weisong_zhao?label=weisong)](https://twitter.com/weisong_zhao/status/1370308101690118146)
@@ -22,7 +22,7 @@
 <p>
 
 
-This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in continued development. It is a part of publication. For details, please refer to: [Weisong Zhao et al. High-throughput add-on super-resolution by enhancing detectable fluctuation, XXX (2022)](https://www.nature.com). Please cite SACD in your publications, if it helps your research.
+This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in continued development. It is a part of publication. For details, please refer to: [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for high-throughput and four-dimensional live-cell super-resolution imaging, XXX (2022)](https://www.nature.com). Please cite SACD in your publications, if it helps your research.
 <br>
 <br>
 <br>
