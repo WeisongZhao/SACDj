@@ -32,7 +32,7 @@ This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in
 </p>
 <br>
 
-[Portal](https://github.com/WeisongZhao/SACDj/blob/main/SACDj_-1.1.3.jar) to the plugin.
+[Portal](https://github.com/WeisongZhao/SACDj/raw/main/SACDj_-1.1.3.jar) to the plugin.
 
 ## SACD reconstruction
 
