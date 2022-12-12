@@ -4,8 +4,9 @@
 // are based on it.
 //% *********************************************************************************
 //% It is a part of publication:
-//% Weisong Zhao et al. High-throughput add-on super-resolution 
-//% by enhancing detectable fluctuation, Nature Methods (2022).
+//% Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for  
+//% high-throughput and four-dimensional live-cell super-resolution imaging
+//% , Nature Biotechnology (2022).
 //% *********************************************************************************
 //%    Copyright 2019~2022 Weisong Zhao et al.
 //%
@@ -46,8 +47,8 @@ import signalSACD.RealSignal;
 import signalSACD.SignalCollector;
 
 public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
-	private static int iterations1 = 10;
-	private static int iterations2 = 10;
+	private static int iterations1 = 20;
+	private static int iterations2 = 20;
 	private static int skip = 20;
 	private static int N = 2;
 	private static double NA = 1.4;
@@ -95,9 +96,9 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		gd.addMessage("SACD core parameters:", new Font("SansSerif", Font.BOLD, 14), new Color(0, 100, 255));
 
 		gd.addNumericField("Stack per SR frame", skip, 0, 5, "20~50 frames");
-		gd.addNumericField("1st iterations (10)", iterations1, 0, 5, "times");
+		gd.addNumericField("1st iterations (20)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
-		gd.addNumericField("2nd iterations (10)", iterations2, 0, 5, "times");
+		gd.addNumericField("2nd iterations (20)", iterations2, 0, 5, "times");
 
 //		boolean ifsub = Prefs.get("SACD.sub", false);
 //

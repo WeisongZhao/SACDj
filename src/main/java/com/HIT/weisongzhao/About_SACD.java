@@ -13,12 +13,12 @@ public class About_SACD extends JDialog implements PlugIn {
 
 	@Override
 	public void run(String arg) {
-		this.walk.fillAbout("SACD Reconstruction", "04/09/2022 updated", "Faster super-resolution fluctuation imaging<br>v1.1.3",
+		this.walk.fillAbout("SACD Reconstruction", "12/12/2022 updated", "Faster super-resolution fluctuation imaging<br>v1.1.3",
 				"School of Instrumentation Science and Engineering","Harbin Institute of Technology",
 				"Weisong Zhao",
 				"<p style=\"text-align:left\">"
 				+ "<b>It is a part of publication:</b>"
-				+ "<br>Weisong Zhao, et al. High-throughput add-on super-resolution by enhancing detectable fluctuation, <i>Nature Methods</i> (2022)."				
+				+ "<br>Weisong Zhao, et al. Enhancing detectable fluorescence fluctuation for high-throughput and four-dimensional live-cell super-resolution imaging, <i>Nature Biotechnology</i> (2022)."				
 				+ "<br><br><b>Acknowledgements:</b><br>This plugin is for SACD reconstruction (w/o Sparse deconvolution). Please cite PANEL in your publications, if it helps your research."
 				+ "<br><br><b>Open source:</b><br>https://github.com/WeisongZhao/SACDj"
 				+ "<br><br><b>Used resources:</b>"
