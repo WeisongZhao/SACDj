@@ -6,7 +6,7 @@
 //% It is a part of publication:
 //% Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for  
 //% high-throughput and four-dimensional live-cell super-resolution imaging
-//% , Nature Biotechnology (2022).
+//% , Nature Photonics (2022).
 //% *********************************************************************************
 //%    Copyright 2019~2022 Weisong Zhao et al.
 //%
@@ -99,7 +99,7 @@ public class SACD_Analyze_psfinter extends JDialog implements PlugIn {
 		gd.addNumericField("1st iterations (20)", iterations1, 0, 5, "times");
 		gd.addNumericField("Fourier interpolation", N, 0, 3, "times");
 		gd.addNumericField("2nd iterations (20)", iterations2, 0, 5, "times");
-
+		gd.addHelp("https://github.com/WeisongZhao/SACDj");
 //		boolean ifsub = Prefs.get("SACD.sub", false);
 //
 //		String[] cbgl2 = new String[] { "Subtract mean value", };
