@@ -51,11 +51,20 @@ These two demos can be found at the [release v1.1.3](https://github.com/WeisongZ
 
 - Tips: Regarding the SACD SR frame visualization, it can be scaled with a gamma correction according to the bSOFI setting.
 ```python
-In FIJI/ImageJ: Process->Math->gamma(0.5)
+In FIJI/ImageJ: 
+	Process->Math->gamma(0.5)
+	Process->Filters->Gaussian Blur(1)
+	Process->Enhance Contrast(0%; normalize)
+Macro:
+run("Gamma...", "value=0.50");
+run("Gaussian Blur...", "sigma=1");
+run("Enhance Contrast...", "saturated=0 normalize");
 ```
+
 - Tips: If data contains strong background, a pre background subtraction will help.
 ```python
-In FIJI/ImageJ: Process->Subtract background
+In FIJI/ImageJ: 
+	Process->Subtract background
 ```
 
 ## Declaration
@@ -78,8 +87,8 @@ If you want to reproduce the results of SACD publication, the [SACDm](https://gi
 ## Related links: 
 - MATLAB version of SACD: [SACDm](https://github.com/WeisongZhao/SACDm)
 - **Some fancy results and comparisons:** [my website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html)
-- **Preprint:** [COMING SOON...](#)
-- **Reference:**
+- **Preprint:** [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for high-throughput and four-dimensional live-cell super-resolution imaging, bioRxiv (2022).](https://doi.org/10.1101/2022.12.12.520072)
+- **Reference:** [COMING SOON](https://doi.org/10.1101/2022.12.12.520072)
 
 <details>
 <summary><b>Plans</b></summary>
