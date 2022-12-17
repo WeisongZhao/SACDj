@@ -88,7 +88,7 @@ If you want to reproduce the results of SACD publication, the [SACDm](https://gi
 - MATLAB version of SACD: [SACDm](https://github.com/WeisongZhao/SACDm)
 - **Some fancy results and comparisons:** [my website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html)
 - **Preprint:** [Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for high-throughput and four-dimensional live-cell super-resolution imaging, bioRxiv (2022).](https://doi.org/10.1101/2022.12.12.520072)
-- **Reference:** [COMING SOON](https://doi.org/10.1101/2022.12.12.520072)
+- **Reference:** [COMING SOON](#)
 
 <details>
 <summary><b>Plans</b></summary>
