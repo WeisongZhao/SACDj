@@ -98,6 +98,7 @@ If you want to reproduce the results of SACD publication, the [SACDm](https://gi
 - ~~Accelarated RL deconvolution.~~
 - ~~Accelarated RL-TV deconvolution.~~
 - Add sparse deconvolution.
+- Automation
 </details>
 
 ## Open source [SACDj](https://github.com/WeisongZhao/SACDj)
