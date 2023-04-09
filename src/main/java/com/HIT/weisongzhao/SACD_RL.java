@@ -77,7 +77,7 @@ public class SACD_RL extends JDialog implements PlugIn {
 			}
 		}
 
-		GenericDialog gd = new GenericDialog("SACD: simplified version");
+		GenericDialog gd = new GenericDialog("Richardson-Lucy deconvolution");
 
 		gd.addChoice("Image sequence", titles, titles[imageChoice]);
 		gd.addNumericField("NA", NA, 1);
