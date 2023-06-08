@@ -2,6 +2,8 @@
 [![website](https://img.shields.io/badge/website-up-green.svg)](https://weisongzhao.github.io/SACDj/)
 [![paper](https://img.shields.io/badge/paper-nature%20photon.-black.svg)](https://www.nature.com)
 [![Github commit](https://img.shields.io/github/last-commit/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/)
+[![Github All Releases](https://img.shields.io/github/downloads/WeisongZhao/SACDj/total.svg)](https://github.com/WeisongZhao/SACDj/releases/tag/v1.1.3/) 
+
 [![License](https://img.shields.io/github/license/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/blob/master/LICENSE.txt)<br>
 [![Twitter](https://img.shields.io/twitter/follow/weisong_zhao?label=weisong)](https://twitter.com/weisong_zhao/status/1370308101690118146)
 [![GitHub watchers](https://img.shields.io/github/watchers/WeisongZhao/SACDj?style=social)](https://github.com/WeisongZhao/SACDj/) 
