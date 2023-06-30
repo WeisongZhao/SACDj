@@ -18,7 +18,8 @@ public class About_SACD extends JDialog implements PlugIn {
 				"Weisong Zhao",
 				"<p style=\"text-align:left\">"
 				+ "<b>It is a part of publication:</b>"
-				+ "<br>Weisong Zhao, et al. Enhancing detectable fluorescence fluctuation for high-throughput and four-dimensional live-cell super-resolution imaging, <i>Nature Photonics</i> (2022)."				
+				+ "<br>Weisong Zhao, et al. Enhanced detection of fluorescence fluctuation for high-throughput super-resolution imaging, <i>Nature Photonics</i> (2023)."
+				+ "<br>https://doi.org/10.1038/s41566-023-01234-9"				
 				+ "<br><br><b>Acknowledgements:</b><br>This plugin is for SACD reconstruction (w/o Sparse deconvolution). Please cite SACD in your publications, if it helps your research."
 				+ "<br><br><b>Open source:</b><br>https://github.com/WeisongZhao/SACDj"
 				+ "<br><br><b>Used resources:</b>"

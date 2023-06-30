@@ -4,11 +4,11 @@
 // are based on it.
 //% *********************************************************************************
 //% It is a part of publication:
-//% Weisong Zhao et al. Enhancing detectable fluorescence fluctuation for  
-//% high-throughput and four-dimensional live-cell super-resolution imaging
-//% , Nature Photonics (2022).
+//% Weisong Zhao et al. Enhanced detection of fluorescence fluctuation for  
+//% high-throughput super-resolution imaging, Nature Photonics (2023).
+//% https://doi.org/10.1038/s41566-023-01234-9
 //% *********************************************************************************
-//%    Copyright 2019~2022 Weisong Zhao et al.
+//%    Copyright 2019~2023 Weisong Zhao et al.
 //%
 //%    This program is free software: you can redistribute it and/or modify
 //%    it under the terms of the Open Data Commons Open Database License v1.0.
