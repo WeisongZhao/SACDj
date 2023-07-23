@@ -1,10 +1,10 @@
 
 [![website](https://img.shields.io/badge/website-up-green.svg)](https://weisongzhao.github.io/SACDj/)
-[![paper](https://img.shields.io/badge/paper-nature%20photon.-black.svg)](https://doi.org/10.1038/s41566-023-01234-9)
 [![Github commit](https://img.shields.io/github/last-commit/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/)
+[![Github All Releases](https://img.shields.io/github/downloads/WeisongZhao/SACDj/total.svg)](https://github.com/WeisongZhao/SACDj/releases/tag/v1.1.3/)<br>
+[![paper](https://img.shields.io/badge/paper-nature%20photon.-black.svg)](https://doi.org/10.1038/s41566-023-01234-9)
 [![releases](https://img.shields.io/badge/release-v1.1.3-brown.svg)](https://github.com/WeisongZhao/SACDj/releases/tag/v1.1.3/)
 [![paper](https://img.shields.io/badge/post-behind%20the%20paper-black.svg)](https://engineeringcommunity.nature.com/posts/super-resolution-made-easier)
-[![Github All Releases](https://img.shields.io/github/downloads/WeisongZhao/SACDj/total.svg)](https://github.com/WeisongZhao/SACDj/releases/tag/v1.1.3/) 
 [![License](https://img.shields.io/github/license/WeisongZhao/SACDj)](https://github.com/WeisongZhao/SACDj/blob/master/LICENSE.txt)<br>
 [![Twitter](https://img.shields.io/twitter/follow/weisong_zhao?label=weisong)](https://twitter.com/weisong_zhao/status/1370308101690118146)
 [![GitHub watchers](https://img.shields.io/github/watchers/WeisongZhao/SACDj?style=social)](https://github.com/WeisongZhao/SACDj/) 
@@ -30,18 +30,19 @@ This repository is for Simplified SACD (w/o Sparse deconvolution) and will be in
 <br>
 <br>
 
-The related MATLAB version can be found at [HERE](https://github.com/WeisongZhao/SACDm/)
-
-You can also find some fancy results and comparisons on my [website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html).
-
-If you are interested in our work, I wrote a [#behind_the_paper](https://engineeringcommunity.nature.com/posts/super-resolution-made-easier) post for further reading.
-
 <p>
 <img src='./imgs/imagej-128.png' align="right" width=50>
 </p>
 <br>
 
 [Portal](https://github.com/WeisongZhao/SACDj/raw/main/SACDj_-1.1.3.jar) to the plugin.
+
+The related MATLAB version can be found at [HERE](https://github.com/WeisongZhao/SACDm/)
+
+You can also find some fancy results and comparisons on my [website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html).
+
+If you are interested in our work, I wrote a [#behind_the_paper](https://engineeringcommunity.nature.com/posts/super-resolution-made-easier) post for further reading.
+
 
 ## SACD reconstruction
 
