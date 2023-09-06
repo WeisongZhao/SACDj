@@ -20,7 +20,7 @@
 <br>
 
 <p>
-<img src='./imgs/splash.png' align="left" width=160>
+<img src='./imgs/splash.png' align="left" width=180>
 <p>
 
 
