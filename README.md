@@ -29,7 +29,6 @@
 <br>
 <br>
 <br>
-<br>
 
 <p>
 <img src='./imgs/imagej-128.png' align="right" width=50>
