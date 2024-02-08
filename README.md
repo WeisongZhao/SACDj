@@ -39,7 +39,7 @@
 
 The related MATLAB version can be found at [HERE](https://github.com/WeisongZhao/SACDm/)
 
-You can also find some fancy results and comparisons on my [website](https://weisongzhao.github.io/MyWeb2/portfolio-4-col.html).
+You can also find some fancy results and comparisons on my [website](https://weisongzhao.github.io/home/portfolio-4-col.html#SACD).
 
 If you are interested in our work, I wrote a [#behind_the_paper](https://engineeringcommunity.nature.com/posts/super-resolution-made-easier) post for further reading.
 
